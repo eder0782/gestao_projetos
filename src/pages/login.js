@@ -4,22 +4,16 @@ import {
     FormControl,
     FormLabel,
     Input,
-    InputGroup,
-    HStack,
-    InputRightElement,
+    Checkbox,
     Stack,
+    Link,
     Button,
     Heading,
     Text,
     useColorModeValue,
-    Link,
   } from '@chakra-ui/react';
-  import { useState } from 'react';
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
   
-  export default function SignupCard() {
-    const [showPassword, setShowPassword] = useState(false);
-  
+  export default function SimpleCard() {
     return (
       <Flex
         minH={'100vh'}
@@ -28,11 +22,9 @@ import {
         bg={useColorModeValue('gray.50', 'gray.800')}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
-            <Heading fontSize={'4xl'} textAlign={'center'}>
-              Sign up
-            </Heading>
+            <Heading fontSize={'4xl'}>Sign in to your account</Heading>
             <Text fontSize={'lg'} color={'gray.600'}>
-              to enjoy all of our cool features ✌️
+              to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
             </Text>
           </Stack>
           <Box
@@ -41,55 +33,30 @@ import {
             boxShadow={'lg'}
             p={8}>
             <Stack spacing={4}>
-              <HStack>
-                <Box>
-                  <FormControl id="firstName" isRequired>
-                    <FormLabel>First Name</FormLabel>
-                    <Input type="text" />
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl id="lastName">
-                    <FormLabel>Last Name</FormLabel>
-                    <Input type="text" />
-                  </FormControl>
-                </Box>
-              </HStack>
-              <FormControl id="email" isRequired>
+              <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
                 <Input type="email" />
               </FormControl>
-              <FormControl id="password" isRequired>
+              <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'} />
-                  <InputRightElement h={'full'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
-                      }>
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
+                <Input type="password" />
               </FormControl>
-              <Stack spacing={10} pt={2}>
+              <Stack spacing={10}>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  align={'start'}
+                  justify={'space-between'}>
+                  <Checkbox>Remember me</Checkbox>
+                  <Link color={'blue.400'}>Forgot password?</Link>
+                </Stack>
                 <Button
-                  loadingText="Submitting"
-                  size="lg"
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{
                     bg: 'blue.500',
                   }}>
-                  Sign up
+                  Sign in
                 </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
-                </Text>
               </Stack>
             </Stack>
           </Box>
