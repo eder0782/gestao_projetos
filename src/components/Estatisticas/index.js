@@ -57,7 +57,7 @@ function StatsCard(props) {
 export default function BasicStatistics() {
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <Flex
+      {/* <Flex
         // width="100%"
         bg="#285E61"
         justifyContent={{
@@ -96,7 +96,7 @@ export default function BasicStatistics() {
             Novo
           </Button>
         </Stack>
-      </Flex>
+      </Flex> */}
       <SimpleGrid
         // justifyContent={"center"}
         columns={{ base: 1, md: 2 }}
