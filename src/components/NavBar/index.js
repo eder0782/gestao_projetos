@@ -14,6 +14,7 @@ import {
     useColorModeValue,
     useBreakpointValue,
     useDisclosure,
+    useColorMode
   } from '@chakra-ui/react';
   
   import {
@@ -25,6 +26,17 @@ import {
   
   export default function WithSubnavigation() {
     const { isOpen, onToggle } = useDisclosure();
+    const { colorMode, toggleColorMode } = useColorMode()
+    // function darkMode() {
+      
+    //   return (
+    //     <header>
+    //       <Button onClick={toggleColorMode}>
+    //         Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+    //       </Button>
+    //     </header>
+    //   )
+    // }
   
     return (
       <Box>
@@ -70,6 +82,7 @@ import {
             direction={'row'}
             spacing={6}>
             <Button
+              onClick={toggleColorMode}
               as={'a'}
               fontSize={'sm'}
               fontWeight={400}
