@@ -25,6 +25,14 @@ export default function FormAddLanc(props) {
   const [fornecedor, setFornecedor] = useState(null);
   const [descric, setDescric] = useState(null);
   const [valor, setValor] = useState(null);
+
+  function Cancelar() {
+    props.setData("");
+    props.setFornecedor("");
+    props.setDescric("");
+    props.setValor("");
+    props.show();
+  }
   return (
     <Collapse in={props.isOpen} animateOpacity>
       <Box
@@ -41,33 +49,40 @@ export default function FormAddLanc(props) {
         <FormControl width="300" isRequired>
           <FormLabel>Fornecedor</FormLabel>
           <Input
-            value={fornecedor}
-            onChange={(e) => setFornecedor(e.currentTarget.value)}
+            value={props.fornecedor}
+            onChange={(e) => props.setFornecedor(e.currentTarget.value)}
             type="text"
             placeholder="Fornecedor...."
           />
           <FormLabel>Descrição</FormLabel>
           <Input
-            value={descric}
-            onChange={(e) => setDescric(e.currentTarget.value)}
+            value={props.descric}
+            onChange={(e) => props.setDescric(e.currentTarget.value)}
             type="text"
             placeholder="Descrição"
           />
           <Flex justifyContent={"space-between"}>
             <Box>
               <FormLabel>Data</FormLabel>
-              <Input value={data} type="date" />
+              <Input onChange={props.setData} type="date" />
             </Box>
             <Box marginLeft={5}>
               <FormLabel>Valor</FormLabel>
-              <Input type="number" placeholder="1200,50" />
+              <Input
+                value={valor}
+                onChange={props.setValor}
+                type="number"
+                placeholder="1200,50"
+              />
             </Box>
           </Flex>
           <Flex justifyContent={"space-around"} marginTop={"5"}>
-            <Button colorScheme="red" onClick={props.show}>
+            <Button colorScheme="red" onClick={Cancelar}>
               Cancelar
             </Button>
-            <Button colorScheme="teal">Salvar</Button>
+            <Button colorScheme="teal" onClick={props.submit}>
+              Salvar
+            </Button>
           </Flex>
         </FormControl>
       </Box>
