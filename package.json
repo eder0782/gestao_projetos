@@ -1,12 +1,15 @@
 {
   "name": "controle_obra",
   "version": "0.1.0",
+  "homepage": "https://eder0782.github.io/obra_escola/",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
@@ -22,5 +25,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
