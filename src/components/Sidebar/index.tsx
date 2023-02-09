@@ -44,7 +44,7 @@ interface LinkItemProps {
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, ref: "/" },
-  { name: "Trending", icon: FiTrendingUp, ref: "#" },
+  { name: "Fornecedores", icon: FiTrendingUp, ref: "/fornecedor" },
   { name: "Explore", icon: FiCompass, ref: "#" },
   { name: "Favourites", icon: FiStar, ref: "#" },
   { name: "Settings", icon: FiSettings, ref: "#" },
@@ -54,10 +54,12 @@ export default function SidebarWithHeader({
   children,
   children2,
   childrenBtn,
+  childrenAdd,
 }: {
   children: ReactNode;
   children2: ReactNode;
   childrenBtn: ReactNode;
+  childrenAdd: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -82,7 +84,16 @@ export default function SidebarWithHeader({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} children={childrenBtn} />
       <Box ml={{ base: 0, md: 60 }} p="4">
+        <Box
+          display={"flex"}
+          justifyContent="center"
+          // alignItems="center"
+          // bg={"red"}
+        >
+          {childrenAdd}
+        </Box>
         {children}
+
         {children2}
       </Box>
     </Box>

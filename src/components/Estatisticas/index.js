@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { BsPerson } from "react-icons/bs";
-import { FiServer } from "react-icons/fi";
+import { FiServer, FiArchive, FiDollarSign } from "react-icons/fi";
 import { GoLocation } from "react-icons/go";
 import { AddIcon, Search2Icon } from "@chakra-ui/icons";
 
@@ -35,12 +35,8 @@ function StatsCard(props) {
     >
       <Flex justifyContent={"space-between"}>
         <Box pl={{ base: 2, md: 4 }}>
-          <StatLabel fontWeight={"medium"} isTruncated>
-            {title}
-          </StatLabel>
-          <StatNumber fontSize={"2xl"} fontWeight={"medium"}>
-            {stat}
-          </StatNumber>
+          <StatLabel>{title}</StatLabel>
+          <StatNumber>{stat}</StatNumber>
         </Box>
         <Box
           my={"auto"}
@@ -104,9 +100,9 @@ export default function BasicStatistics() {
         // justifyContent="space-between"
       >
         <StatsCard
-          title={"Users"}
-          stat={"5,000"}
-          icon={<BsPerson size={"3em"} />}
+          title={"No. de Lançamentos:"}
+          stat={"5"}
+          icon={<FiArchive size={"2em"} />}
         />
         {/* <StatsCard
             title={'Servers'}
@@ -114,9 +110,9 @@ export default function BasicStatistics() {
             icon={<FiServer size={'3em'} />}
           /> */}
         <StatsCard
-          title={"Datacenters"}
-          stat={"7"}
-          icon={<GoLocation size={"3em"} />}
+          title={"Valor Total:"}
+          stat={"2.000,00"}
+          icon={<FiDollarSign size={"2em"} />}
         />
       </SimpleGrid>
     </Box>

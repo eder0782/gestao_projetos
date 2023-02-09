@@ -1,12 +1,13 @@
-// import WithSubnavigation from "@/components/NavBar";
 import Tabela from "@/components/Tabela";
 import Link from "next/link";
 import BasicStatistics from "@/components/Estatisticas";
 import SidebarWithHeader from "@/components/Sidebar";
-// import { Text } from "@chakra-ui/react";
-import ButtonAdd from "@/components/NavComponents/ButtonAdd";
+import FormAddLanc from "@/components/Forms/FormAddLanc";
+import NavAdd from "@/components/NavComponents/NavAdd";
+import { useDisclosure } from "@chakra-ui/react";
+
 export default function Home() {
-  const t = <BasicStatistics />;
+  const { isOpen, onToggle } = useDisclosure();
   return (
     <div>
       {/* <WithSubnavigation />
@@ -14,9 +15,10 @@ export default function Home() {
       <Tabela /> */}
 
       <SidebarWithHeader
-        children={t}
+        children={<BasicStatistics />}
         children2={<Tabela />}
-        childrenBtn={<ButtonAdd />}
+        childrenBtn={<NavAdd show={onToggle} />}
+        childrenAdd={<FormAddLanc isOpen={isOpen} show={onToggle} />}
       />
       <Link href="/login"> Login</Link>
     </div>

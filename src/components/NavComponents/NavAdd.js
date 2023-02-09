@@ -38,9 +38,12 @@ import {
   FiSearch,
   FiChevronDown,
   FiPlus,
+  FiPlusCircle,
+  FiPlusSquare,
+  FiFilePlus,
 } from "react-icons/fi";
 
-export default function ButtonAdd() {
+export default function NavAdd(props) {
   return (
     <>
       {/* <Input width={"150"} type="tel" placeholder="Filtrar por Forcenedor" /> */}
@@ -62,7 +65,8 @@ export default function ButtonAdd() {
           size="lg"
           variant="ghost"
           aria-label="open menu"
-          icon={<FiPlus />}
+          icon={<FiPlusCircle size="1.5em" />}
+          onClick={props.show}
         />
       </Center>
     </>
