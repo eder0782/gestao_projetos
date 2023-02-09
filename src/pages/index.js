@@ -6,17 +6,10 @@ import FormAddLanc from "@/components/Forms/FormAddLanc";
 import NavAdd from "@/components/NavComponents/NavAdd";
 import { useDisclosure } from "@chakra-ui/react";
 import database from "@/services/firebase";
-import { ref, update, push, child, get } from "firebase/database";
+import { ref, update, push, child, get, remove } from "firebase/database";
 // import { collection, addDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import {
-  collection,
-  query,
-  onSnapshot,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+
 import { async } from "@firebase/util";
 // import firebase from "../services/firebase";
 
@@ -27,13 +20,25 @@ export default function Home() {
   const [descric, setDescric] = useState("");
   const [valor, setValor] = useState("");
   const [dados, setDados] = useState([]);
+  const [totalItens, setTotalItens] = useState(null);
+  const [valorTotal, setValorTotal] = useState(null);
+
+  //MONITORA OS DADOS PARA CALCULAR OS TOTAIS
+  useEffect(() => {
+    setTotalItens(dados.length);
+    if (dados.length !== 0) {
+      let sum = dados.reduce(function (prevVal, elem) {
+        return prevVal + parseFloat(elem.valor);
+      }, 0);
+      setValorTotal(sum.toLocaleString("pt-br", { minimumFractionDigits: 2 }));
+    } else setValorTotal(0);
+  }, [dados]);
 
   const updateForm = async () => {
-    get(child(ref(database), "despesas"))
+    await get(child(ref(database), "despesas"))
       .then((snapshot) => {
+        setDados([]);
         if (snapshot.exists()) {
-          setDados([]);
-
           snapshot.forEach((item) => {
             var data = {
               key: item.key,
@@ -48,15 +53,28 @@ export default function Home() {
           // console.log(dados);
         } else {
           console.log("No data available");
+          //setTotalItens(0);
         }
+        //setando o total de lançamentos
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const DeleteDespesa = async (id) => {
-    await deleteDoc(doc(database, "despesas", id));
+  const handleDelDespesas = async (id) => {
+    const dbRef = ref(database, "/despesas/" + id);
+
+    await remove(dbRef)
+      .then(() => {
+        alert("Deletado com sucesso");
+        updateForm();
+      })
+      .catch((err) => {
+        alert("Ocorreu o seguinte erro: " + err);
+      });
+
+    // deleteDoc(doc(database, "despesas", id))
   };
 
   const handleSubmit = async (e) => {
@@ -99,8 +117,10 @@ export default function Home() {
       <Tabela /> */}
 
       <SidebarWithHeader
-        children={<BasicStatistics />}
-        children2={<Tabela dados={dados} delete={DeleteDespesa} />}
+        children={
+          <BasicStatistics valorTotal={valorTotal} totalItens={totalItens} />
+        }
+        children2={<Tabela dados={dados} delete={handleDelDespesas} />}
         childrenBtn={<NavAdd show={onToggle} />}
         childrenAdd={
           <FormAddLanc

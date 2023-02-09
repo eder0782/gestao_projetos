@@ -43,11 +43,15 @@ function Tabela(props) {
               {props.dados.length > 0 ? (
                 props.dados.map((item) => {
                   return (
-                    <Tr>
+                    <Tr key={item.key}>
                       <Td>{item.data}</Td>
                       <Td>{item.fornecedor}</Td>
                       <Td>{item.descric}</Td>
-                      <Td isNumeric>{item.valor}</Td>
+                      <Td isNumeric>
+                        {parseFloat(item.valor).toLocaleString("pt-br", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
                       <Td>
                         <HStack>
                           <Button
@@ -58,7 +62,7 @@ function Tabela(props) {
                           </Button>
                           <Button
                             colorScheme="red"
-                            // onClick={props.delete(item.key)}
+                            onClick={() => props.delete(item.key)}
                             //leftIcon={}
                           >
                             <FiTrash2 />
@@ -69,7 +73,13 @@ function Tabela(props) {
                   );
                 })
               ) : (
-                <Tr>Menor</Tr>
+                <Tr>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td></Td>
+                </Tr>
               )}
             </Tbody>
             <Tfoot>

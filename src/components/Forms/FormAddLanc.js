@@ -82,11 +82,11 @@ export default function FormAddLanc(props) {
             </Box>
           </Flex>
           <Flex justifyContent={"space-around"} marginTop={"5"}>
-            <Button colorScheme="red" onClick={Cancelar}>
-              Cancelar
-            </Button>
             <Button colorScheme="teal" onClick={props.submit}>
               Salvar
+            </Button>
+            <Button colorScheme="red" onClick={Cancelar}>
+              Cancelar
             </Button>
           </Flex>
         </FormControl>

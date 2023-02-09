@@ -50,49 +50,9 @@ function StatsCard(props) {
   );
 }
 
-export default function BasicStatistics() {
+export default function BasicStatistics(props) {
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      {/* <Flex
-        // width="100%"
-        bg="#285E61"
-        justifyContent={{
-          base: "center",
-          // sm: "space-between",
-          md: "space-between",
-          lg: "space-between",
-        }}
-        alignItems="center"
-        p="2"
-        marginBottom="10"
-        flexWrap="wrap"
-        // as=
-      >
-        <Text
-          fontSize={{ base: "2xl", lg: "4xl" }}
-          // marginRight={{ base: "15" }}
-          marginBottom={{ base: "15" }}
-        >
-          Planilha de Lançamentos
-        </Text>
-        <Stack direction="row" spacing={4}>
-          <Button
-            leftIcon={<Search2Icon />}
-            colorScheme="teal"
-            variant="outline"
-          >
-            Pesquisar
-          </Button>
-          <Button
-            leftIcon={<AddIcon />}
-            variant="outline"
-            colorScheme="teal"
-            variant="outline"
-          >
-            Novo
-          </Button>
-        </Stack>
-      </Flex> */}
       <SimpleGrid
         // justifyContent={"center"}
         columns={{ base: 1, md: 2 }}
@@ -101,7 +61,7 @@ export default function BasicStatistics() {
       >
         <StatsCard
           title={"No. de Lançamentos:"}
-          stat={"5"}
+          stat={props.totalItens}
           icon={<FiArchive size={"2em"} />}
         />
         {/* <StatsCard
@@ -111,7 +71,7 @@ export default function BasicStatistics() {
           /> */}
         <StatsCard
           title={"Valor Total:"}
-          stat={"2.000,00"}
+          stat={props.valorTotal}
           icon={<FiDollarSign size={"2em"} />}
         />
       </SimpleGrid>
