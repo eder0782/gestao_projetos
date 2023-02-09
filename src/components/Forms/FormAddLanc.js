@@ -64,13 +64,18 @@ export default function FormAddLanc(props) {
           <Flex justifyContent={"space-between"}>
             <Box>
               <FormLabel>Data</FormLabel>
-              <Input onChange={props.setData} type="date" />
+              <Input
+                // defaultValue={Date.now()}
+                value={props.data}
+                onChange={(e) => props.setData(e.currentTarget.value)}
+                type="date"
+              />
             </Box>
             <Box marginLeft={5}>
               <FormLabel>Valor</FormLabel>
               <Input
-                value={valor}
-                onChange={props.setValor}
+                value={props.valor}
+                onChange={(e) => props.setValor(e.currentTarget.value)}
                 type="number"
                 placeholder="1200,50"
               />

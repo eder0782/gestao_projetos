@@ -6,6 +6,7 @@ import {
   Tr,
   Th,
   Td,
+  Text,
   TableCaption,
   TableContainer,
   Container,
@@ -17,7 +18,12 @@ import {
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useState } from "react";
 
-function Tabela() {
+function Tabela(props) {
+  // function handleLinhaTabela(obj) {
+  //   return <div key={obj.key}>{obj.data}</div>;
+  //   // console.log(obj);
+  // }
+
   return (
     <Center>
       <Box marginTop="10" width="90%">
@@ -34,72 +40,37 @@ function Tabela() {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>inches</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td isNumeric>25.4</Td>
-                <Td>
-                  <HStack>
-                    <Button
-                      colorScheme="teal"
-                      // leftIcon={}
-                    >
-                      <FiEdit />
-                    </Button>
-                    <Button
-                      colorScheme="red"
-                      //leftIcon={}
-                    >
-                      <FiTrash2 />
-                    </Button>
-                  </HStack>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>feet</Td>
-                <Td>centimetres (cm)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td isNumeric>30.48</Td>
-                <Td>
-                  <HStack>
-                    <Button
-                      colorScheme="teal"
-                      // leftIcon={}
-                    >
-                      <FiEdit />
-                    </Button>
-                    <Button
-                      colorScheme="red"
-                      //leftIcon={}
-                    >
-                      <FiTrash2 />
-                    </Button>
-                  </HStack>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>yards</Td>
-                <Td>metres (m)</Td>
-                <Td>millimetres (mm)</Td>
-                <Td isNumeric>0.91444</Td>
-                <Td>
-                  <HStack>
-                    <Button
-                      colorScheme="teal"
-                      // leftIcon={}
-                    >
-                      <FiEdit />
-                    </Button>
-                    <Button
-                      colorScheme="red"
-                      //leftIcon={}
-                    >
-                      <FiTrash2 />
-                    </Button>
-                  </HStack>
-                </Td>
-              </Tr>
+              {props.dados.length > 0 ? (
+                props.dados.map((item) => {
+                  return (
+                    <Tr>
+                      <Td>{item.data}</Td>
+                      <Td>{item.fornecedor}</Td>
+                      <Td>{item.descric}</Td>
+                      <Td isNumeric>{item.valor}</Td>
+                      <Td>
+                        <HStack>
+                          <Button
+                            colorScheme="teal"
+                            // leftIcon={}
+                          >
+                            <FiEdit />
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            // onClick={props.delete(item.key)}
+                            //leftIcon={}
+                          >
+                            <FiTrash2 />
+                          </Button>
+                        </HStack>
+                      </Td>
+                    </Tr>
+                  );
+                })
+              ) : (
+                <Tr>Menor</Tr>
+              )}
             </Tbody>
             <Tfoot>
               <Tr>
