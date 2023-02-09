@@ -51,12 +51,12 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 export default function SidebarWithHeader({
-  children,
+  children1,
   children2,
   childrenBtn,
   childrenAdd,
 }: {
-  children: ReactNode;
+  children1: ReactNode;
   children2: ReactNode;
   childrenBtn: ReactNode;
   childrenAdd: ReactNode;
@@ -82,7 +82,7 @@ export default function SidebarWithHeader({
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} children={childrenBtn} />
+      <MobileNav onOpen={onOpen} child={childrenBtn} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         <Box
           display={"flex"}
@@ -92,7 +92,7 @@ export default function SidebarWithHeader({
         >
           {childrenAdd}
         </Box>
-        {children}
+        {children1}
 
         {children2}
       </Box>
@@ -138,15 +138,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
+  child: ReactText;
 }
-const NavItem = ({
-  icon,
-  reference,
-  close,
-  children,
-  ...rest
-}: NavItemProps) => {
+const NavItem = ({ icon, reference, close, child, ...rest }: NavItemProps) => {
   return (
     <Link
       href={reference}
@@ -177,7 +171,7 @@ const NavItem = ({
             as={icon}
           />
         )}
-        {children}
+        {child}
       </Flex>
     </Link>
   );

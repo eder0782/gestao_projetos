@@ -117,7 +117,7 @@ export default function Home() {
       <Tabela /> */}
 
       <SidebarWithHeader
-        children={
+        children1={
           <BasicStatistics valorTotal={valorTotal} totalItens={totalItens} />
         }
         children2={<Tabela dados={dados} delete={handleDelDespesas} />}
