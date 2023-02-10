@@ -51,7 +51,7 @@ export default function NavAdd(props) {
         <InputGroup>
           <InputLeftElement
             pointerEvents="none"
-            // children={<FiSearch color="gray.300" />}
+			
           />
           <Input
             width={"150"}

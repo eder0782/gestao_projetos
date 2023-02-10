@@ -118,7 +118,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Controle de Projetos
+          Logo
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -138,9 +138,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  child: ReactText;
+  children: ReactText;
 }
-const NavItem = ({ icon, reference, close, child, ...rest }: NavItemProps) => {
+const NavItem = ({
+  icon,
+  reference,
+  close,
+  children,
+  ...rest
+}: NavItemProps) => {
   return (
     <Link
       href={reference}
@@ -171,7 +177,7 @@ const NavItem = ({ icon, reference, close, child, ...rest }: NavItemProps) => {
             as={icon}
           />
         )}
-        {child}
+        {children}
       </Flex>
     </Link>
   );
@@ -179,9 +185,9 @@ const NavItem = ({ icon, reference, close, child, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
-  children: ReactNode;
+  child: ReactNode;
 }
-const MobileNav = ({ onOpen, children, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, child, ...rest }: MobileProps) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -203,7 +209,7 @@ const MobileNav = ({ onOpen, children, ...rest }: MobileProps) => {
       />
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        {children}
+        {child}
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
