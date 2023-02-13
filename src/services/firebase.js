@@ -17,6 +17,6 @@ const firebaseConfig = {
 //Abrir minha conexao
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const db_name = process.env.API_DB_NAME;
+const db_name = process.env.NEXT_PUBLIC_DB_NAME;
 
 export { database, db_name };

@@ -5,7 +5,7 @@ import SidebarWithHeader from "@/components/Sidebar";
 import FormAddLanc from "@/components/Forms/FormAddLanc";
 import NavAdd from "@/components/NavComponents/NavAdd";
 import { useDisclosure } from "@chakra-ui/react";
-import database from "@/services/firebase";
+import { database, db_name } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
 // import { collection, addDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
@@ -22,6 +22,7 @@ export default function Home() {
   const [dados, setDados] = useState([]);
   const [totalItens, setTotalItens] = useState(null);
   const [valorTotal, setValorTotal] = useState(null);
+  // console.log(db_name);
 
   //MONITORA OS DADOS PARA CALCULAR OS TOTAIS
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function Home() {
   }, [dados]);
 
   const updateForm = async () => {
-    await get(child(ref(database), "despesas"))
+    await get(child(ref(database), `/${db_name}/despesas`))
       .then((snapshot) => {
         setDados([]);
         if (snapshot.exists()) {
@@ -63,7 +64,7 @@ export default function Home() {
   };
 
   const handleDelDespesas = async (id) => {
-    const dbRef = ref(database, "/despesas/" + id);
+    const dbRef = ref(database, `/${db_name}/despesas/` + id);
 
     await remove(dbRef)
       .then(() => {
@@ -88,11 +89,11 @@ export default function Home() {
       };
 
       // Get a key for a new Post.
-      const idLancamento = await push(child(ref(database), "despesas")).key;
+      const idLancamento = await push(child(ref(database), db_name)).key;
 
       // Write the new post's data simultaneously in the posts list and the user's post list.
       const updates = {};
-      updates["/despesas/" + idLancamento] = lancamento;
+      updates[`/${db_name}/despesas/` + idLancamento] = lancamento;
 
       await update(ref(database), updates)
         .then(() => {
