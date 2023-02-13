@@ -6,26 +6,67 @@ import {
   Tr,
   Th,
   Td,
-  Text,
   TableCaption,
   TableContainer,
-  Container,
   Box,
   Center,
   HStack,
   Button,
+  Text,
+} from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function Tabela(props) {
-  // function handleLinhaTabela(obj) {
-  //   return <div key={obj.key}>{obj.data}</div>;
-  //   // console.log(obj);
-  // }
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = useRef(null);
+  const [idDelete, setIdDelete] = useState(null);
+  const initialRef = useRef(null);
+
+  const deletar = () => {
+    props.delete(idDelete);
+    onClose();
+  };
 
   return (
     <Center>
+      <Modal
+        initialFocusRef={initialRef}
+        // finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmar Exclusão!!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <Text>
+              Após a exclusão o lançamento não poderá mais ser restaurado.
+              Deseja realmente Exluir??
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={deletar} colorScheme="teal" mr={3}>
+              SIM
+            </Button>
+            <Button ref={initialRef} onClick={onClose} colorScheme="red">
+              NÃO
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Box marginTop="10" width="90%">
         <TableContainer>
           <Table variant="striped" colorScheme="teal">
@@ -62,7 +103,10 @@ function Tabela(props) {
                           </Button>
                           <Button
                             colorScheme="red"
-                            onClick={() => props.delete(item.key)}
+                            onClick={() => {
+                              setIdDelete(item.key);
+                              onOpen();
+                            }}
                             //leftIcon={}
                           >
                             <FiTrash2 />
