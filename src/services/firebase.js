@@ -9,13 +9,14 @@ const firebaseConfig = {
   projectId: "myapp-3a811",
   storageBucket: "myapp-3a811.appspot.com",
   messagingSenderId: "1060069994270",
-  appId: "1:1060069994270:web:461095e79e13786b7ba30f",
-  measurementId: "G-K1DLGLM1TL",
+  appId: process.env.appId, //"1:1060069994270:web:461095e79e13786b7ba30f",
+  measurementId: process.env.measurementId, //"G-K1DLGLM1TL",
 };
 
 // if (!firebase.apps.length) {
 //Abrir minha conexao
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const db_name = process.env.API_DB_NAME;
 
-export default database;
+export { database, db_name };
