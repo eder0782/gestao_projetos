@@ -136,28 +136,48 @@ export default function Home() {
       //SE NÃO ESTIVER EM MODO DE EDIÇÃO, GERA UM NOVO ID
       if (editMode === false) {
         const idLancamento = await push(child(ref(database), db_name)).key;
-        setId(idLancamento);
+        const updates = {};
+        updates[`/${db_name}/despesas/` + idLancamento] = lancamento;
+        await update(ref(database), updates)
+          .then(() => {
+            updateForm();
+            setData("");
+            setFornecedor("");
+            setDescric("");
+            setValor("");
+            setId(null);
+            alert("Lançamento Realizado com Sucesso!!");
+            //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
+            if (editMode) onClose();
+            //FECHA O MODO DE EDIÇÃO
+            setEditMode(false);
+          })
+          .catch((err) =>
+            alert("Falha na inclusão.Ocorreu o seguinte erro: " + err)
+          );
       }
-
-      // Write the new post's data simultaneously in the posts list and the user's post list.
-      const updates = {};
-      updates[`/${db_name}/despesas/` + id] = lancamento;
-
-      await update(ref(database), updates)
-        .then(() => {
-          updateForm();
-          setData("");
-          setFornecedor("");
-          setDescric("");
-          setValor("");
-          setId(null);
-          alert("Lançamento Realizado com Sucesso!!");
-          //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
-          if (editMode) onClose();
-          //FECHA O MODO DE EDIÇÃO
-          setEditMode(false);
-        })
-        .catch((err) => alert("Ocorreu o seguinte erro: " + err));
+      //SE ESTIVER EM MODO DE EDIÇÃO UTILIZA O ID QUE ESTÁ NO STATE "ID"
+      else {
+        const updates = {};
+        updates[`/${db_name}/despesas/` + id] = lancamento;
+        await update(ref(database), updates)
+          .then(() => {
+            updateForm();
+            setData("");
+            setFornecedor("");
+            setDescric("");
+            setValor("");
+            setId(null);
+            alert("Atualização realizada con sucesso!!");
+            //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
+            if (editMode) onClose();
+            //FECHA O MODO DE EDIÇÃO
+            setEditMode(false);
+          })
+          .catch((err) =>
+            alert("Falha na atualização.Ocorreu o seguinte erro: " + err)
+          );
+      }
     }
   };
 
