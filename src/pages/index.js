@@ -15,31 +15,49 @@ import { async } from "@firebase/util";
 // import firebase from "../services/firebase";
 
 export default function Home() {
+  //controla o estado o componente FormAddLanc
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  //controla o estado dos dados recebidos do servidor
+  const [dados, setDados] = useState([]);
+
+  //controla o estado dos dados filtrados no componente FiltrarDespesas
+  const [dadosFiltrados, setDadosFiltrados] = useState([]);
+
+  //controla o estado dos dados a serem salvos no servidor
   const [data, setData] = useState("");
   const [fornecedor, setFornecedor] = useState("");
   const [descric, setDescric] = useState("");
   const [valor, setValor] = useState("");
-  const [dados, setDados] = useState([]);
+  const [id, setId] = useState(null);
+
+  //controla o estado do componente BasicStatistics
   const [totalItens, setTotalItens] = useState(null);
   const [valorTotal, setValorTotal] = useState(null);
-  const [id, setId] = useState(null);
+
+  //Verifica se o formAddlanc está em modo de edição
   const [editMode, setEditMode] = useState(false);
+
+  //controla o estado do componente FiltrarDespesas
   const [showFiltrar, setShowFiltrar] = useState(false);
   const [inputFiltrar, setInputFiltrar] = useState("");
+  const [filtrarPor, setFiltrarPor] = useState("F");
 
-  // console.log(db_name);
-
-  //MONITORA OS DADOS PARA CALCULAR OS TOTAIS
+  //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
-    setTotalItens(dados.length);
-    if (dados.length !== 0) {
-      let sum = dados.reduce(function (prevVal, elem) {
+    setDadosFiltrados(dados);
+  }, [dados]);
+
+  //MONITORA OS DADOSFILTRADOS PARA CALCULAR OS TOTAIS
+  useEffect(() => {
+    setTotalItens(dadosFiltrados.length);
+    if (dadosFiltrados.length !== 0) {
+      let sum = dadosFiltrados.reduce(function (prevVal, elem) {
         return prevVal + parseFloat(elem.valor);
       }, 0);
       setValorTotal(sum.toLocaleString("pt-br", { minimumFractionDigits: 2 }));
     } else setValorTotal(0);
-  }, [dados]);
+  }, [dadosFiltrados]);
 
   const updateForm = async () => {
     await get(child(ref(database), `/${db_name}/despesas`))
@@ -84,13 +102,34 @@ export default function Home() {
     // deleteDoc(doc(database, "despesas", id))
   };
 
+  //realiza o filtro dos dados, monitorando o state inputFiltrar
+  useEffect(() => {
+    if (inputFiltrar !== "") {
+      if (filtrarPor === "F") {
+        let filtro = dados.filter((item) =>
+          item.fornecedor.includes(inputFiltrar.toUpperCase())
+        );
+
+        setDadosFiltrados(filtro);
+      } else {
+        let filtro = dados.filter((item) =>
+          item.descric.includes(inputFiltrar.toLowerCase())
+        );
+
+        setDadosFiltrados(filtro);
+      }
+    } else setDadosFiltrados(dados);
+  }, [inputFiltrar]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (descric !== "" && fornecedor !== "" && data !== "" && valor !== "") {
       const lancamento = {
         data,
-        fornecedor,
-        descric,
+        //convertendo o nome no fornecedor p/ maiúsculo
+        fornecedor: fornecedor.toUpperCase(),
+        //convertendo a descrição para minúculo
+        descric: descric.toLowerCase(),
         valor,
       };
 
@@ -152,7 +191,11 @@ export default function Home() {
           <BasicStatistics valorTotal={valorTotal} totalItens={totalItens} />
         }
         children2={
-          <Tabela dados={dados} delete={handleDelDespesas} edit={handleEdit} />
+          <Tabela
+            dados={dadosFiltrados}
+            delete={handleDelDespesas}
+            edit={handleEdit}
+          />
         }
         childrenAdd={
           <FormAddLanc
@@ -174,11 +217,19 @@ export default function Home() {
           <FiltrarDespesas
             isOpen={showFiltrar}
             inputFiltrar={inputFiltrar}
+            setFiltrarPor={setFiltrarPor}
+            filtrarPor={filtrarPor}
             setInputFiltrar={setInputFiltrar}
             close={setShowFiltrar}
           />
         }
-        childrenBtn={<NavAdd show={onOpen} openFiltrar={setShowFiltrar} />}
+        childrenBtn={
+          <NavAdd
+            show={onOpen}
+            openFiltrar={setShowFiltrar}
+            isOpenFiltrar={showFiltrar}
+          />
+        }
       />
       <Link href="/login"> Login</Link>
     </div>

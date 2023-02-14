@@ -63,7 +63,7 @@ export default function NavAdd(props) {
           aria-label="open menu"
           icon={<FiSearch size="1.5em" />}
           onClick={() => {
-            props.openFiltrar(true);
+            props.openFiltrar(!props.isOpenFiltrar);
           }}
         />
 

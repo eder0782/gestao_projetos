@@ -42,7 +42,7 @@ export default function FormAddLanc(props) {
       //para poder dar foco nele
       setTimeout(() => {
         inpRef.current.focus();
-      }, 500);
+      }, 200);
     }
   }, [props.isOpen]);
 
@@ -65,15 +65,21 @@ export default function FormAddLanc(props) {
           <FormLabel>Fornecedor</FormLabel>
           <Input
             ref={inpRef}
-            value={props.fornecedor}
-            onChange={(e) => props.setFornecedor(e.currentTarget.value)}
+            value={props.fornecedor.toUpperCase()}
+            onChange={(e) =>
+              //converte o valor para maiusculo
+              props.setFornecedor(e.currentTarget.value.toUpperCase())
+            }
             type="text"
             placeholder="Fornecedor...."
           />
           <FormLabel>Descrição</FormLabel>
           <Input
-            value={props.descric}
-            onChange={(e) => props.setDescric(e.currentTarget.value)}
+            value={props.descric.toLowerCase()}
+            onChange={(e) =>
+              //converte o texto para minúsculo
+              props.setDescric(e.currentTarget.value.toLowerCase())
+            }
             type="text"
             placeholder="Descrição"
           />

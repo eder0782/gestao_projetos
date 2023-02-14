@@ -86,6 +86,7 @@ export default function SidebarWithHeader({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} child={childrenBtn} />
       <Box ml={{ base: 0, md: 60 }} p="4">
+        {children1}
         <Box
           display={"flex"}
           justifyContent="center"
@@ -94,7 +95,6 @@ export default function SidebarWithHeader({
         >
           {childrenAdd}
         </Box>
-        {children1}
         {childrenFiltraLanc}
 
         {children2}

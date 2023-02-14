@@ -29,7 +29,7 @@ export default function FiltrarDespesas(props) {
       //para poder dar foco nele
       setTimeout(() => {
         consulta.current.focus();
-      }, 500);
+      }, 300);
     }
   }, [props.isOpen]);
 
@@ -59,10 +59,14 @@ export default function FiltrarDespesas(props) {
             <Stack spacing={3}>
               <FormLabel as="legend">Filtrar por:</FormLabel>
 
-              <RadioGroup defaultValue="fornecedor">
+              <RadioGroup
+                onChange={props.setFiltrarPor}
+                value={props.filtrarPor}
+                // defaultValue="fornecedor"
+              >
                 <HStack spacing="24px">
-                  <Radio value="fornecedor">Fornecedor</Radio>
-                  <Radio value="descric">Descrição</Radio>
+                  <Radio value="F">Fornecedor</Radio>
+                  <Radio value="D">Descrição</Radio>
                 </HStack>
               </RadioGroup>
               <Input
