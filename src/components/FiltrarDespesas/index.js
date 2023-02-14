@@ -22,6 +22,17 @@ export default function FiltrarDespesas(props) {
     props.setInputFiltrar("");
   };
 
+  const consulta = useRef(null);
+  useEffect(() => {
+    if (props.isOpen) {
+      //Esse setTimeout foi colocado, pois tem que aguardar o componente aparecer
+      //para poder dar foco nele
+      setTimeout(() => {
+        consulta.current.focus();
+      }, 500);
+    }
+  }, [props.isOpen]);
+
   return (
     <Collapse in={props.isOpen} animateOpacity>
       <Center>
@@ -37,7 +48,12 @@ export default function FiltrarDespesas(props) {
           shadow={"lg"}
         >
           <Flex justifyContent={"flex-end"}>
-            <CloseButton size="lg" onClick={() => handleCancelar()} />
+            <CloseButton
+              color={"#ffffff"}
+              bgColor={"red"}
+              size="md"
+              onClick={() => handleCancelar()}
+            />
           </Flex>
           <FormControl as="fieldset">
             <Stack spacing={3}>
@@ -55,7 +71,7 @@ export default function FiltrarDespesas(props) {
                   props.setInputFiltrar(e.currentTarget.value);
                 }}
                 placeholder="consultar..."
-                ref={props.ref}
+                ref={consulta}
                 size="md"
               />
               <FormHelperText>

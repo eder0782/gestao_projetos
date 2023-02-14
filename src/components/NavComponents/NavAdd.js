@@ -64,7 +64,6 @@ export default function NavAdd(props) {
           icon={<FiSearch size="1.5em" />}
           onClick={() => {
             props.openFiltrar(true);
-            // props.ref.current.focus();
           }}
         />
 

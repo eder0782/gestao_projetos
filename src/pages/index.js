@@ -25,10 +25,9 @@ export default function Home() {
   const [valorTotal, setValorTotal] = useState(null);
   const [id, setId] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [showFiltrar, setShowFiltrar] = useState(true);
+  const [showFiltrar, setShowFiltrar] = useState(false);
   const [inputFiltrar, setInputFiltrar] = useState("");
 
-  const consulta = useRef(null);
   // console.log(db_name);
 
   //MONITORA OS DADOS PARA CALCULAR OS TOTAIS
@@ -130,7 +129,13 @@ export default function Home() {
     setFornecedor(item.fornecedor);
     setValor(item.valor);
     setEditMode(true);
-    onOpen();
+    //SE O FORM JÁ ESTIVER ABERTO
+    if (isOpen) {
+      onClose();
+      setTimeout(() => {
+        onOpen();
+      }, 500);
+    } else onOpen();
   };
 
   useEffect(() => {
@@ -171,12 +176,9 @@ export default function Home() {
             inputFiltrar={inputFiltrar}
             setInputFiltrar={setInputFiltrar}
             close={setShowFiltrar}
-            ref={consulta}
           />
         }
-        childrenBtn={
-          <NavAdd show={onOpen} openFiltrar={setShowFiltrar} ref={consulta} />
-        }
+        childrenBtn={<NavAdd show={onOpen} openFiltrar={setShowFiltrar} />}
       />
       <Link href="/login"> Login</Link>
     </div>

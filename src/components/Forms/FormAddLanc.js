@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import {
   FormControl,
@@ -25,6 +25,7 @@ export default function FormAddLanc(props) {
   const [fornecedor, setFornecedor] = useState(null);
   const [descric, setDescric] = useState(null);
   const [valor, setValor] = useState(null);
+  const inpRef = useRef(null);
 
   function Cancelar() {
     props.setData("");
@@ -33,6 +34,18 @@ export default function FormAddLanc(props) {
     props.setValor("");
     props.close();
   }
+
+  //ESSE USEEFFECT MONITORA SE O COMPONENTE ESTÁ VISÍVEL PARA PODER DAR FOCO
+  useEffect(() => {
+    if (props.isOpen) {
+      //Esse setTimeout foi colocado, pois tem que aguardar o componente aparecer
+      //para poder dar foco nele
+      setTimeout(() => {
+        inpRef.current.focus();
+      }, 500);
+    }
+  }, [props.isOpen]);
+
   return (
     <Collapse in={props.isOpen} animateOpacity>
       <Box
@@ -51,6 +64,7 @@ export default function FormAddLanc(props) {
         <FormControl width="300" isRequired>
           <FormLabel>Fornecedor</FormLabel>
           <Input
+            ref={inpRef}
             value={props.fornecedor}
             onChange={(e) => props.setFornecedor(e.currentTarget.value)}
             type="text"
