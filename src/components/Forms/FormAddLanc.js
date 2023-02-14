@@ -3,30 +3,17 @@ import { useRef, useEffect, useState } from "react";
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
-  Center,
   Button,
   Box,
   Flex,
 } from "@chakra-ui/react";
-import {
-  Fade,
-  ScaleFade,
-  Slide,
-  SlideFade,
-  useDisclosure,
-  Collapse,
-} from "@chakra-ui/react";
+import { Collapse } from "@chakra-ui/react";
 
 export default function FormAddLanc(props) {
-  const [data, setData] = useState(null);
-  const [fornecedor, setFornecedor] = useState(null);
-  const [descric, setDescric] = useState(null);
-  const [valor, setValor] = useState(null);
+  const [fileName, setFileName] = useState([]);
   const inpRef = useRef(null);
-
+  const fileRef = useRef(null);
   function Cancelar() {
     props.setData("");
     props.setFornecedor("");
@@ -62,55 +49,72 @@ export default function FormAddLanc(props) {
         rounded="md"
       >
         <FormControl width="300" isRequired>
-          <FormLabel>Fornecedor</FormLabel>
-          <Input
-            ref={inpRef}
-            value={props.fornecedor.toUpperCase()}
-            onChange={(e) =>
-              //converte o valor para maiusculo
-              props.setFornecedor(e.currentTarget.value.toUpperCase())
-            }
-            type="text"
-            placeholder="Fornecedor...."
-          />
-          <FormLabel>Descrição</FormLabel>
-          <Input
-            value={props.descric.toLowerCase()}
-            onChange={(e) =>
-              //converte o texto para minúsculo
-              props.setDescric(e.currentTarget.value.toLowerCase())
-            }
-            type="text"
-            placeholder="Descrição"
-          />
-          <Flex justifyContent={"space-between"}>
-            <Box>
-              <FormLabel>Data</FormLabel>
-              <Input
-                // defaultValue={Date.now()}
-                value={props.data}
-                onChange={(e) => props.setData(e.currentTarget.value)}
-                type="date"
-              />
-            </Box>
-            <Box marginLeft={5}>
-              <FormLabel>Valor</FormLabel>
-              <Input
-                value={props.valor}
-                onChange={(e) => props.setValor(e.currentTarget.value)}
-                type="number"
-                placeholder="1200,50"
-              />
-            </Box>
-          </Flex>
-          <Flex justifyContent={"space-around"} marginTop={"5"}>
-            <Button colorScheme="teal" onClick={props.submit}>
-              Salvar
-            </Button>
-            <Button colorScheme="red" onClick={Cancelar}>
-              Cancelar
-            </Button>
-          </Flex>
+          <form>
+            <FormLabel>Fornecedor</FormLabel>
+            <Input
+              ref={inpRef}
+              value={props.fornecedor.toUpperCase()}
+              onChange={(e) =>
+                //converte o valor para maiusculo
+                props.setFornecedor(e.currentTarget.value.toUpperCase())
+              }
+              type="text"
+              borderColor={"blackAlpha.600"}
+              placeholder="Fornecedor...."
+            />
+            <FormLabel>Descrição</FormLabel>
+            <Input
+              value={props.descric.toLowerCase()}
+              onChange={(e) =>
+                //converte o texto para minúsculo
+                props.setDescric(e.currentTarget.value.toLowerCase())
+              }
+              borderColor={"blackAlpha.600"}
+              type="text"
+              placeholder="Descrição"
+            />
+
+            <Flex justifyContent={"space-between"}>
+              <Box>
+                <FormLabel>Data</FormLabel>
+                <Input
+                  // defaultValue={Date.now()}
+                  value={props.data}
+                  onChange={(e) => props.setData(e.currentTarget.value)}
+                  type="date"
+                  borderColor={"blackAlpha.600"}
+                />
+              </Box>
+              <Box marginLeft={5}>
+                <FormLabel>Valor</FormLabel>
+                <Input
+                  value={props.valor}
+                  onChange={(e) => props.setValor(e.currentTarget.value)}
+                  type="number"
+                  placeholder="1200,50"
+                  borderColor={"blackAlpha.600"}
+                />
+              </Box>
+            </Flex>
+            <FormLabel>Arquivo</FormLabel>
+            <Input
+              type="file"
+              value={fileName}
+              onChange={(e) => {
+                setFileName(e.currentTarget.value);
+              }}
+              ref={fileRef}
+              borderColor={"blackAlpha.600"}
+            />
+            <Flex justifyContent={"space-around"} marginTop={"5"}>
+              <Button colorScheme="teal" onClick={() => props.submit(fileRef)}>
+                Salvar
+              </Button>
+              <Button colorScheme="red" onClick={Cancelar}>
+                Cancelar
+              </Button>
+            </Flex>
+          </form>
         </FormControl>
       </Box>
     </Collapse>

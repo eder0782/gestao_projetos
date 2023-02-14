@@ -77,6 +77,7 @@ function Tabela(props) {
                 <Th>Fornecedor</Th>
                 <Th>Descrição</Th>
                 <Th isNumeric>Valor</Th>
+                <Th>Arquivo</Th>
                 <Th>Ação</Th>
               </Tr>
             </Thead>
@@ -93,6 +94,7 @@ function Tabela(props) {
                           minimumFractionDigits: 2,
                         })}
                       </Td>
+                      <Td>{item.fileURL}</Td>
                       <Td>
                         <HStack>
                           <Button

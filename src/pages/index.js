@@ -5,10 +5,16 @@ import SidebarWithHeader from "@/components/Sidebar";
 import FormAddLanc from "@/components/Forms/FormAddLanc";
 import NavAdd from "@/components/NavComponents/NavAdd";
 import { useDisclosure } from "@chakra-ui/react";
-import { database, db_name } from "@/services/firebase";
+import { database, storage_name, db_name, storage } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
 import FiltrarDespesas from "@/components/FiltrarDespesas";
 // import { collection, addDoc } from "firebase/firestore";
+import { useToast } from "@chakra-ui/react";
+import {
+  ref as refStorage,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
 
 import { async } from "@firebase/util";
@@ -37,11 +43,17 @@ export default function Home() {
 
   //Verifica se o formAddlanc está em modo de edição
   const [editMode, setEditMode] = useState(false);
+  //
+  const toast = useToast();
 
   //controla o estado do componente FiltrarDespesas
   const [showFiltrar, setShowFiltrar] = useState(false);
   const [inputFiltrar, setInputFiltrar] = useState("");
   const [filtrarPor, setFiltrarPor] = useState("F");
+  //controla o estado do aquivo
+  const [fileURL, setFileURL] = useState("");
+  // const [sendFile, setSendFile] = useState(null);
+  const [progressPorcent, setPorgessPorcent] = useState(0);
 
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
@@ -92,11 +104,26 @@ export default function Home() {
 
     await remove(dbRef)
       .then(() => {
-        alert("Deletado com sucesso");
+        toast({
+          title: "Sucesso na exclusão.",
+          description: "O lançamento foi excluído com sucesso!",
+          status: "success",
+          position: "top",
+          duration: 5000,
+          isClosable: true,
+        });
+
         updateForm();
       })
       .catch((err) => {
-        alert("Ocorreu o seguinte erro: " + err);
+        toast({
+          title: "Erro na exclusão.",
+          description: `Ocorreo o seguinte erro!: ${err}`,
+          status: "error",
+          position: "top",
+          duration: 5000,
+          isClosable: true,
+        });
       });
 
     // deleteDoc(doc(database, "despesas", id))
@@ -121,62 +148,138 @@ export default function Home() {
     } else setDadosFiltrados(dados);
   }, [inputFiltrar]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (descric !== "" && fornecedor !== "" && data !== "" && valor !== "") {
-      const lancamento = {
-        data,
-        //convertendo o nome no fornecedor p/ maiúsculo
-        fornecedor: fornecedor.toUpperCase(),
-        //convertendo a descrição para minúculo
-        descric: descric.toLowerCase(),
-        valor,
-      };
+  const handleSubmit = async (fileName) => {
+    // e.preventDefault();
+    // console.log();
 
-      //SE NÃO ESTIVER EM MODO DE EDIÇÃO, GERA UM NOVO ID
-      if (editMode === false) {
-        const idLancamento = await push(child(ref(database), db_name)).key;
-        const updates = {};
-        updates[`/${db_name}/despesas/` + idLancamento] = lancamento;
-        await update(ref(database), updates)
-          .then(() => {
-            updateForm();
-            setData("");
-            setFornecedor("");
-            setDescric("");
-            setValor("");
-            setId(null);
-            alert("Lançamento Realizado com Sucesso!!");
-            //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
-            if (editMode) onClose();
-            //FECHA O MODO DE EDIÇÃO
-            setEditMode(false);
-          })
-          .catch((err) =>
-            alert("Falha na inclusão.Ocorreu o seguinte erro: " + err)
-          );
+    if (descric !== "" && fornecedor !== "" && data !== "" && valor !== "") {
+      //SALVANDO O ARQUIVO
+      const file = fileName.current.files[0];
+      if (file) {
+        const storageRef = refStorage(storage, `${storage_name}/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setPorgessPorcent(progress);
+          },
+          (error) => {
+            toast({
+              title: "Erro.",
+              description: `Erro ao salvar o arquivo!: ${err}`,
+              status: "error",
+              position: "top",
+              duration: 5000,
+              isClosable: true,
+            });
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setFileURL(downloadURL);
+              console.log("url");
+              console.log(fileURL);
+              // salvarDados();
+            });
+          }
+        );
+      } else {
+        salvarDados();
       }
-      //SE ESTIVER EM MODO DE EDIÇÃO UTILIZA O ID QUE ESTÁ NO STATE "ID"
-      else {
-        const updates = {};
-        updates[`/${db_name}/despesas/` + id] = lancamento;
-        await update(ref(database), updates)
-          .then(() => {
-            updateForm();
-            setData("");
-            setFornecedor("");
-            setDescric("");
-            setValor("");
-            setId(null);
-            alert("Atualização realizada con sucesso!!");
-            //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
-            if (editMode) onClose();
-            //FECHA O MODO DE EDIÇÃO
-            setEditMode(false);
-          })
-          .catch((err) =>
-            alert("Falha na atualização.Ocorreu o seguinte erro: " + err)
-          );
+
+      //CRIEI ESSA FUNÇÃO, POIS TENHO QUE ESPERAR A IMAGEM SER SALVA, PARA PODER PEGAR O LINK
+      async function salvarDados() {
+        const lancamento = {
+          data,
+          //convertendo o nome no fornecedor p/ maiúsculo
+          fornecedor: fornecedor.toUpperCase(),
+          //convertendo a descrição para minúculo
+          descric: descric.toLowerCase(),
+          valor,
+          fileURL,
+        };
+        //SE NÃO ESTIVER EM MODO DE EDIÇÃO, GERA UM NOVO ID
+        if (editMode === false) {
+          const idLancamento = push(child(ref(database), db_name)).key;
+          const updates = {};
+          updates[`/${db_name}/despesas/` + idLancamento] = lancamento;
+          await update(ref(database), updates)
+            .then(() => {
+              updateForm();
+              setData("");
+              setFornecedor("");
+              setDescric("");
+              setValor("");
+              setId(null);
+              setFileURL(null);
+
+              toast({
+                title: "Salvo com sucesso.",
+                description: "Lançamento Realizado com Sucesso!!",
+                status: "success",
+                duration: 5000,
+                position: "top",
+                isClosable: true,
+              });
+              //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
+              if (editMode) onClose();
+              //FECHA O MODO DE EDIÇÃO
+              setEditMode(false);
+            })
+            .catch((err) =>
+              toast({
+                title: "Salvo com sucesso.",
+                description:
+                  "Falha na inclusão.Ocorreu o seguinte erro: " + err,
+                status: "error",
+                duration: 5000,
+                position: "top",
+                isClosable: true,
+              })
+            );
+        }
+        //SE ESTIVER EM MODO DE EDIÇÃO UTILIZA O ID QUE ESTÁ NO STATE "ID"
+        else {
+          const updates = {};
+          updates[`/${db_name}/despesas/` + id] = lancamento;
+          await update(ref(database), updates)
+            .then(() => {
+              updateForm();
+              setData("");
+              setFornecedor("");
+              setDescric("");
+              setValor("");
+              setId(null);
+              setFileURL(null);
+
+              toast({
+                title: "Sucesso.",
+                description: "Atualização realizada con sucesso!!",
+                status: "success",
+                duration: 5000,
+                position: "top",
+                isClosable: true,
+              });
+              //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
+              if (editMode) onClose();
+              //FECHA O MODO DE EDIÇÃO
+              setEditMode(false);
+            })
+            .catch((err) =>
+              toast({
+                title: "Erro.",
+                description:
+                  "Falha na atualização.Ocorreu o seguinte erro: " + err,
+                status: "error",
+                duration: 5000,
+                position: "top",
+                isClosable: true,
+              })
+            );
+        }
       }
     }
   };
@@ -187,6 +290,7 @@ export default function Home() {
     setDescric(item.descric);
     setFornecedor(item.fornecedor);
     setValor(item.valor);
+    setFileURL(item.fileURL);
     setEditMode(true);
     //SE O FORM JÁ ESTIVER ABERTO
     if (isOpen) {
