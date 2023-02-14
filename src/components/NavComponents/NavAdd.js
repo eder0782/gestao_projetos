@@ -34,7 +34,7 @@ import {
   FiStar,
   FiSettings,
   FiMenu,
-  FiBell,
+  FiRefreshCcw,
   FiSearch,
   FiChevronDown,
   FiPlus,
@@ -45,37 +45,40 @@ import {
 
 export default function NavAdd(props) {
   return (
-    <>
-      {/* <Input width={"150"} type="tel" placeholder="Filtrar por Forcenedor" /> */}
-      <Center>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none" />
-          <Input
-            width={"150"}
-            type="tel"
-            placeholder="Filtrar por Forcenedor"
-          />
-        </InputGroup>
-        <IconButton
-          marginLeft="10"
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiSearch size="1.5em" />}
-          onClick={() => {
-            props.openFiltrar(!props.isOpenFiltrar);
-          }}
-        />
+    <Center>
+      {/* <InputGroup>
+        <InputLeftElement pointerEvents="none" />
+        <Input width={"150"} type="tel" placeholder="Filtrar por Forcenedor" />
+      </InputGroup> */}
+      <IconButton
+        marginLeft="10"
+        size="lg"
+        variant="ghost"
+        aria-label="open menu"
+        icon={<FiRefreshCcw size="1.5em" />}
+        onClick={() => {
+          props.updateForm();
+        }}
+      />
+      <IconButton
+        marginLeft="10"
+        size="lg"
+        variant="ghost"
+        aria-label="open menu"
+        icon={<FiSearch size="1.5em" />}
+        onClick={() => {
+          props.openFiltrar(!props.isOpenFiltrar);
+        }}
+      />
 
-        <IconButton
-          marginLeft="10"
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiPlusCircle size="1.5em" />}
-          onClick={props.show}
-        />
-      </Center>
-    </>
+      <IconButton
+        marginLeft="10"
+        size="lg"
+        variant="ghost"
+        aria-label="open menu"
+        icon={<FiPlusCircle size="1.5em" />}
+        onClick={props.show}
+      />
+    </Center>
   );
 }

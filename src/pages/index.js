@@ -228,6 +228,7 @@ export default function Home() {
             show={onOpen}
             openFiltrar={setShowFiltrar}
             isOpenFiltrar={showFiltrar}
+            updateForm={updateForm}
           />
         }
       />
