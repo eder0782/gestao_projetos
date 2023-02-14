@@ -55,11 +55,13 @@ export default function SidebarWithHeader({
   children2,
   childrenBtn,
   childrenAdd,
+  childrenFiltraLanc,
 }: {
   children1: ReactNode;
   children2: ReactNode;
   childrenBtn: ReactNode;
   childrenAdd: ReactNode;
+  childrenFiltraLanc: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -93,6 +95,7 @@ export default function SidebarWithHeader({
           {childrenAdd}
         </Box>
         {children1}
+        {childrenFiltraLanc}
 
         {children2}
       </Box>

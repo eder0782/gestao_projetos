@@ -7,14 +7,15 @@ import NavAdd from "@/components/NavComponents/NavAdd";
 import { useDisclosure } from "@chakra-ui/react";
 import { database, db_name } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
+import FiltrarDespesas from "@/components/FiltrarDespesas";
 // import { collection, addDoc } from "firebase/firestore";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { async } from "@firebase/util";
 // import firebase from "../services/firebase";
 
 export default function Home() {
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState("");
   const [fornecedor, setFornecedor] = useState("");
   const [descric, setDescric] = useState("");
@@ -22,6 +23,12 @@ export default function Home() {
   const [dados, setDados] = useState([]);
   const [totalItens, setTotalItens] = useState(null);
   const [valorTotal, setValorTotal] = useState(null);
+  const [id, setId] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [showFiltrar, setShowFiltrar] = useState(true);
+  const [inputFiltrar, setInputFiltrar] = useState("");
+
+  const consulta = useRef(null);
   // console.log(db_name);
 
   //MONITORA OS DADOS PARA CALCULAR OS TOTAIS
@@ -88,12 +95,15 @@ export default function Home() {
         valor,
       };
 
-      // Get a key for a new Post.
-      const idLancamento = await push(child(ref(database), db_name)).key;
+      //SE NÃO ESTIVER EM MODO DE EDIÇÃO, GERA UM NOVO ID
+      if (editMode === false) {
+        const idLancamento = await push(child(ref(database), db_name)).key;
+        setId(idLancamento);
+      }
 
       // Write the new post's data simultaneously in the posts list and the user's post list.
       const updates = {};
-      updates[`/${db_name}/despesas/` + idLancamento] = lancamento;
+      updates[`/${db_name}/despesas/` + id] = lancamento;
 
       await update(ref(database), updates)
         .then(() => {
@@ -102,10 +112,25 @@ export default function Home() {
           setFornecedor("");
           setDescric("");
           setValor("");
+          setId(null);
           alert("Lançamento Realizado com Sucesso!!");
+          //SE ESTIVER EM MODO DE EDIÇÃO FECHA A TELA
+          if (editMode) onClose();
+          //FECHA O MODO DE EDIÇÃO
+          setEditMode(false);
         })
         .catch((err) => alert("Ocorreu o seguinte erro: " + err));
     }
+  };
+
+  const handleEdit = (item) => {
+    setId(item.key);
+    setData(item.data);
+    setDescric(item.descric);
+    setFornecedor(item.fornecedor);
+    setValor(item.valor);
+    setEditMode(true);
+    onOpen();
   };
 
   useEffect(() => {
@@ -121,8 +146,9 @@ export default function Home() {
         children1={
           <BasicStatistics valorTotal={valorTotal} totalItens={totalItens} />
         }
-        children2={<Tabela dados={dados} delete={handleDelDespesas} />}
-        childrenBtn={<NavAdd show={onToggle} />}
+        children2={
+          <Tabela dados={dados} delete={handleDelDespesas} edit={handleEdit} />
+        }
         childrenAdd={
           <FormAddLanc
             data={data}
@@ -134,9 +160,22 @@ export default function Home() {
             valor={valor}
             setValor={setValor}
             isOpen={isOpen}
-            show={onToggle}
+            show={onOpen}
             submit={handleSubmit}
+            close={onClose}
           />
+        }
+        childrenFiltraLanc={
+          <FiltrarDespesas
+            isOpen={showFiltrar}
+            inputFiltrar={inputFiltrar}
+            setInputFiltrar={setInputFiltrar}
+            close={setShowFiltrar}
+            ref={consulta}
+          />
+        }
+        childrenBtn={
+          <NavAdd show={onOpen} openFiltrar={setShowFiltrar} ref={consulta} />
         }
       />
       <Link href="/login"> Login</Link>

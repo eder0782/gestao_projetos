@@ -97,6 +97,7 @@ function Tabela(props) {
                         <HStack>
                           <Button
                             colorScheme="teal"
+                            onClick={() => props.edit(item)}
                             // leftIcon={}
                           >
                             <FiEdit />

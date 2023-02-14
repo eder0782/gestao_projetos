@@ -49,16 +49,24 @@ export default function NavAdd(props) {
       {/* <Input width={"150"} type="tel" placeholder="Filtrar por Forcenedor" /> */}
       <Center>
         <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-			
-          />
+          <InputLeftElement pointerEvents="none" />
           <Input
             width={"150"}
             type="tel"
             placeholder="Filtrar por Forcenedor"
           />
         </InputGroup>
+        <IconButton
+          marginLeft="10"
+          size="lg"
+          variant="ghost"
+          aria-label="open menu"
+          icon={<FiSearch size="1.5em" />}
+          onClick={() => {
+            props.openFiltrar(true);
+            // props.ref.current.focus();
+          }}
+        />
 
         <IconButton
           marginLeft="10"

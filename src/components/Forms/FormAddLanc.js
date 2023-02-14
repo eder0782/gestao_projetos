@@ -31,7 +31,7 @@ export default function FormAddLanc(props) {
     props.setFornecedor("");
     props.setDescric("");
     props.setValor("");
-    props.show();
+    props.close();
   }
   return (
     <Collapse in={props.isOpen} animateOpacity>
@@ -42,8 +42,10 @@ export default function FormAddLanc(props) {
         borderColor="blackAlpha.900"
         maxWidth="500"
         marginTop={"5"}
-        shadow={"dark-lg"}
-        p="6"
+        shadow={"lg"}
+        px={{ base: 2, md: 7 }}
+        py={"5"}
+        // p="6"
         rounded="md"
       >
         <FormControl width="300" isRequired>
