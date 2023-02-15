@@ -18,6 +18,7 @@ import {
 import { useState, useRef, useEffect } from "react";
 
 import { async } from "@firebase/util";
+import { resolve } from "styled-jsx/css";
 // import firebase from "../services/firebase";
 
 export default function Home() {
@@ -83,6 +84,7 @@ export default function Home() {
               data: item.val().data,
               fornecedor: item.val().fornecedor,
               valor: item.val().valor,
+              fileURL: item.val().fileURL,
             };
             // console.log(data);
             setDados((oldArray) => [...oldArray, data].reverse());
@@ -179,19 +181,17 @@ export default function Home() {
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setFileURL(downloadURL);
-              console.log("url");
-              console.log(fileURL);
-              // salvarDados();
+              console.log(downloadURL);
+              salvarDados(downloadURL);
             });
           }
         );
       } else {
-        salvarDados();
+        salvarDados("");
       }
 
       //CRIEI ESSA FUNÇÃO, POIS TENHO QUE ESPERAR A IMAGEM SER SALVA, PARA PODER PEGAR O LINK
-      async function salvarDados() {
+      async function salvarDados(downloadURL) {
         const lancamento = {
           data,
           //convertendo o nome no fornecedor p/ maiúsculo
@@ -199,7 +199,9 @@ export default function Home() {
           //convertendo a descrição para minúculo
           descric: descric.toLowerCase(),
           valor,
-          fileURL,
+          //se a variável downloadUrl estiver preenchida recebe o valor dela
+          // caso contrário, recebe o valor do state
+          fileURL: downloadURL ? downloadURL : fileURL,
         };
         //SE NÃO ESTIVER EM MODO DE EDIÇÃO, GERA UM NOVO ID
         if (editMode === false) {
@@ -214,7 +216,7 @@ export default function Home() {
               setDescric("");
               setValor("");
               setId(null);
-              setFileURL(null);
+              setFileURL("");
 
               toast({
                 title: "Salvo com sucesso.",
@@ -253,7 +255,7 @@ export default function Home() {
               setDescric("");
               setValor("");
               setId(null);
-              setFileURL(null);
+              setFileURL("");
 
               toast({
                 title: "Sucesso.",
@@ -293,6 +295,8 @@ export default function Home() {
     setFileURL(item.fileURL);
     setEditMode(true);
     //SE O FORM JÁ ESTIVER ABERTO
+    console.log("url");
+    console.log(fileURL);
     if (isOpen) {
       onClose();
       setTimeout(() => {
@@ -335,6 +339,8 @@ export default function Home() {
             show={onOpen}
             submit={handleSubmit}
             close={onClose}
+            setFileURL={setFileURL}
+            setEditMode={setEditMode}
           />
         }
         childrenFiltraLanc={

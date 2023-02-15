@@ -13,6 +13,7 @@ import {
   HStack,
   Button,
   Text,
+  Badge,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -94,7 +95,23 @@ function Tabela(props) {
                           minimumFractionDigits: 2,
                         })}
                       </Td>
-                      <Td>{item.fileURL}</Td>
+                      <Td>
+                        {item.fileURL ? (
+                          <Badge variant="solid" colorScheme="green">
+                            <a
+                              href={item.fileURL}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                            >
+                              MOSTRAR
+                            </a>
+                          </Badge>
+                        ) : (
+                          <Badge variant="solid" colorScheme="red">
+                            INDISPONÍVEL
+                          </Badge>
+                        )}
+                      </Td>
                       <Td>
                         <HStack>
                           <Button

@@ -19,6 +19,8 @@ export default function FormAddLanc(props) {
     props.setFornecedor("");
     props.setDescric("");
     props.setValor("");
+    props.setFileURL("");
+    props.setEditMode("");
     props.close();
   }
 
@@ -27,6 +29,7 @@ export default function FormAddLanc(props) {
     if (props.isOpen) {
       //Esse setTimeout foi colocado, pois tem que aguardar o componente aparecer
       //para poder dar foco nele
+      setFileName([]);
       setTimeout(() => {
         inpRef.current.focus();
       }, 200);
