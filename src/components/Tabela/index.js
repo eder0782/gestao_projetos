@@ -91,8 +91,8 @@ function Tabela(props) {
                     return (
                       <Tr key={item.key}>
                         <Td>{item.data}</Td>
-                        <Td>{item.fornecedor}</Td>
-                        <Td>{item.descric}</Td>
+                        <Td whiteSpace={"pre-wrap"}>{item.fornecedor}</Td>
+                        <Td whiteSpace={"pre-wrap"}>{item.descric}</Td>
                         <Td isNumeric>
                           {parseFloat(item.valor).toLocaleString("pt-br", {
                             minimumFractionDigits: 2,
