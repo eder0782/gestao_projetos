@@ -10,6 +10,8 @@ import {
   Text,
   Button,
   Stack,
+  s,
+  Skeleton,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { BsPerson } from "react-icons/bs";
@@ -53,28 +55,30 @@ function StatsCard(props) {
 export default function BasicStatistics(props) {
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <SimpleGrid
-        // justifyContent={"center"}
-        columns={{ base: 1, md: 2 }}
-        spacing={{ base: 5, lg: 20 }}
-        // justifyContent="space-between"
-      >
-        <StatsCard
-          title={"No. de Lançamentos:"}
-          stat={props.totalItens}
-          icon={<FiArchive size={"2em"} />}
-        />
-        {/* <StatsCard
+      <Skeleton fadeDuration={1} isLoaded={props.skeletonLoad}>
+        <SimpleGrid
+          // justifyContent={"center"}
+          columns={{ base: 1, md: 2 }}
+          spacing={{ base: 5, lg: 20 }}
+          // justifyContent="space-between"
+        >
+          <StatsCard
+            title={"No. de Lançamentos:"}
+            stat={props.totalItens}
+            icon={<FiArchive size={"2em"} />}
+          />
+          {/* <StatsCard
             title={'Servers'}
             stat={'1,000'}
             icon={<FiServer size={'3em'} />}
           /> */}
-        <StatsCard
-          title={"Valor Total:"}
-          stat={props.valorTotal}
-          icon={<FiDollarSign size={"2em"} />}
-        />
-      </SimpleGrid>
+          <StatsCard
+            title={"Valor Total:"}
+            stat={props.valorTotal}
+            icon={<FiDollarSign size={"2em"} />}
+          />
+        </SimpleGrid>
+      </Skeleton>
     </Box>
   );
 }

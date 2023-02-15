@@ -4,6 +4,7 @@ import BasicStatistics from "@/components/Estatisticas";
 import SidebarWithHeader from "@/components/Sidebar";
 import FormAddLanc from "@/components/Forms/FormAddLanc";
 import NavAdd from "@/components/NavComponents/NavAdd";
+import ModalProgress from "@/components/ModalProgress";
 import { useDisclosure } from "@chakra-ui/react";
 import { database, storage_name, db_name, storage } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
@@ -27,6 +28,9 @@ export default function Home() {
 
   //controla o estado dos dados recebidos do servidor
   const [dados, setDados] = useState([]);
+
+  //controla o estado do Modal Progress
+  const [isOpenModalProgress, setOpenModalProgress] = useState(false);
 
   //controla o estado dos dados filtrados no componente FiltrarDespesas
   const [dadosFiltrados, setDadosFiltrados] = useState([]);
@@ -56,9 +60,15 @@ export default function Home() {
   // const [sendFile, setSendFile] = useState(null);
   const [progressPorcent, setPorgessPorcent] = useState(0);
 
+  //controla o estado do skeleton da tabela de despesas
+  const [skeletonLoad, setSkeletonLoad] = useState(false);
+
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
     setDadosFiltrados(dados);
+    setTimeout(() => {
+      setSkeletonLoad(true);
+    }, 4000);
   }, [dados]);
 
   //MONITORA OS DADOSFILTRADOS PARA CALCULAR OS TOTAIS
@@ -86,10 +96,9 @@ export default function Home() {
               valor: item.val().valor,
               fileURL: item.val().fileURL,
             };
-            // console.log(data);
+
             setDados((oldArray) => [...oldArray, data].reverse());
           });
-          // console.log(dados);
         } else {
           console.log("No data available");
           //setTotalItens(0);
@@ -155,6 +164,8 @@ export default function Home() {
     // console.log();
 
     if (descric !== "" && fornecedor !== "" && data !== "" && valor !== "") {
+      //ATIVANDO O MODAL PROGRESS
+      setOpenModalProgress(true);
       //SALVANDO O ARQUIVO
       const file = fileName.current.files[0];
       if (file) {
@@ -178,10 +189,10 @@ export default function Home() {
               duration: 5000,
               isClosable: true,
             });
+            setOpenModalProgress(false);
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log(downloadURL);
               salvarDados(downloadURL);
             });
           }
@@ -230,8 +241,10 @@ export default function Home() {
               if (editMode) onClose();
               //FECHA O MODO DE EDIÇÃO
               setEditMode(false);
+              //FECHA O MODAL PROGRESS
+              setOpenModalProgress(false);
             })
-            .catch((err) =>
+            .catch((err) => {
               toast({
                 title: "Salvo com sucesso.",
                 description:
@@ -240,8 +253,11 @@ export default function Home() {
                 duration: 5000,
                 position: "top",
                 isClosable: true,
-              })
-            );
+              });
+
+              //FECHA O MODAL PROGRESS
+              setOpenModalProgress(false);
+            });
         }
         //SE ESTIVER EM MODO DE EDIÇÃO UTILIZA O ID QUE ESTÁ NO STATE "ID"
         else {
@@ -269,8 +285,10 @@ export default function Home() {
               if (editMode) onClose();
               //FECHA O MODO DE EDIÇÃO
               setEditMode(false);
+              //FECHA O MODAL PROGRESS
+              setOpenModalProgress(false);
             })
-            .catch((err) =>
+            .catch((err) => {
               toast({
                 title: "Erro.",
                 description:
@@ -279,8 +297,10 @@ export default function Home() {
                 duration: 5000,
                 position: "top",
                 isClosable: true,
-              })
-            );
+              });
+              //FECHA O MODAL PROGRESS
+              setOpenModalProgress(false);
+            });
         }
       }
     }
@@ -295,8 +315,6 @@ export default function Home() {
     setFileURL(item.fileURL);
     setEditMode(true);
     //SE O FORM JÁ ESTIVER ABERTO
-    console.log("url");
-    console.log(fileURL);
     if (isOpen) {
       onClose();
       setTimeout(() => {
@@ -313,16 +331,21 @@ export default function Home() {
       {/* <WithSubnavigation />
       <BasicStatistics />
       <Tabela /> */}
-
+      <ModalProgress isOpen={isOpenModalProgress} />
       <SidebarWithHeader
         children1={
-          <BasicStatistics valorTotal={valorTotal} totalItens={totalItens} />
+          <BasicStatistics
+            valorTotal={valorTotal}
+            totalItens={totalItens}
+            skeletonLoad={skeletonLoad}
+          />
         }
         children2={
           <Tabela
             dados={dadosFiltrados}
             delete={handleDelDespesas}
             edit={handleEdit}
+            skeletonLoad={skeletonLoad}
           />
         }
         childrenAdd={

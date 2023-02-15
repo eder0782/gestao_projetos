@@ -14,6 +14,7 @@ import {
   Button,
   Text,
   Badge,
+  Skeleton,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -68,93 +69,96 @@ function Tabela(props) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Box marginTop="10" width="90%">
-        <TableContainer>
-          <Table variant="striped" colorScheme="teal">
-            <TableCaption>Imperial to metric conversion factors</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Data</Th>
-                <Th>Fornecedor</Th>
-                <Th>Descrição</Th>
-                <Th isNumeric>Valor</Th>
-                <Th>Arquivo</Th>
-                <Th>Ação</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {props.dados.length > 0 ? (
-                props.dados.map((item) => {
-                  return (
-                    <Tr key={item.key}>
-                      <Td>{item.data}</Td>
-                      <Td>{item.fornecedor}</Td>
-                      <Td>{item.descric}</Td>
-                      <Td isNumeric>
-                        {parseFloat(item.valor).toLocaleString("pt-br", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.fileURL ? (
-                          <Badge variant="solid" colorScheme="green">
-                            <a
-                              href={item.fileURL}
-                              target="_blank"
-                              rel="noreferrer noopener"
-                            >
-                              MOSTRAR
-                            </a>
-                          </Badge>
-                        ) : (
-                          <Badge variant="solid" colorScheme="red">
-                            INDISPONÍVEL
-                          </Badge>
-                        )}
-                      </Td>
-                      <Td>
-                        <HStack>
-                          <Button
-                            colorScheme="teal"
-                            onClick={() => props.edit(item)}
-                            // leftIcon={}
-                          >
-                            <FiEdit />
-                          </Button>
-                          <Button
-                            colorScheme="red"
-                            onClick={() => {
-                              setIdDelete(item.key);
-                              onOpen();
-                            }}
-                            //leftIcon={}
-                          >
-                            <FiTrash2 />
-                          </Button>
-                        </HStack>
-                      </Td>
-                    </Tr>
-                  );
-                })
-              ) : (
+        <Skeleton fadeDuration={4} isLoaded={props.skeletonLoad}>
+          <TableContainer>
+            <Table variant="striped" colorScheme="teal">
+              <TableCaption>Imperial to metric conversion factors</TableCaption>
+              <Thead>
                 <Tr>
-                  <Td></Td>
-                  <Td></Td>
-                  <Td></Td>
-                  <Td></Td>
-                  <Td></Td>
+                  <Th>Data</Th>
+                  <Th>Fornecedor</Th>
+                  <Th>Descrição</Th>
+                  <Th isNumeric>Valor</Th>
+                  <Th>Arquivo</Th>
+                  <Th>Ação</Th>
                 </Tr>
-              )}
-            </Tbody>
-            <Tfoot>
-              <Tr>
-                <Th>To convert</Th>
-                <Th>into</Th>
-                <Th isNumeric>multiply by</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {props.dados.length > 0 ? (
+                  props.dados.map((item) => {
+                    return (
+                      <Tr key={item.key}>
+                        <Td>{item.data}</Td>
+                        <Td>{item.fornecedor}</Td>
+                        <Td>{item.descric}</Td>
+                        <Td isNumeric>
+                          {parseFloat(item.valor).toLocaleString("pt-br", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </Td>
+                        <Td>
+                          {item.fileURL ? (
+                            <Badge variant="solid" colorScheme="green">
+                              <a
+                                href={item.fileURL}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                              >
+                                MOSTRAR
+                              </a>
+                            </Badge>
+                          ) : (
+                            <Badge variant="solid" colorScheme="red">
+                              INDISPONÍVEL
+                            </Badge>
+                          )}
+                        </Td>
+                        <Td>
+                          <HStack>
+                            <Button
+                              colorScheme="teal"
+                              onClick={() => props.edit(item)}
+                              // leftIcon={}
+                            >
+                              <FiEdit />
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              onClick={() => {
+                                setIdDelete(item.key);
+                                onOpen();
+                              }}
+                              //leftIcon={}
+                            >
+                              <FiTrash2 />
+                            </Button>
+                          </HStack>
+                        </Td>
+                      </Tr>
+                    );
+                  })
+                ) : (
+                  <Tr>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                  </Tr>
+                )}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th>To convert</Th>
+                  <Th>into</Th>
+                  <Th isNumeric>multiply by</Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+        </Skeleton>
       </Box>
     </Center>
   );
