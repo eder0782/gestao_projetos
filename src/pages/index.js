@@ -334,6 +334,8 @@ export default function Home() {
       <Tabela /> */}
       <ModalProgress isOpen={isOpenModalProgress} />
       <SidebarWithHeader
+        numLancamentos={totalItens}
+        vlrTotal={valorTotal}
         children1={
           <BasicStatistics
             valorTotal={valorTotal}

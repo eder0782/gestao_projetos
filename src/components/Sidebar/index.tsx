@@ -21,6 +21,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Stack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import {
@@ -56,12 +57,16 @@ export default function SidebarWithHeader({
   childrenBtn,
   childrenAdd,
   childrenFiltraLanc,
+  numLancamentos,
+  vlrTotal,
 }: {
   children1: ReactNode;
   children2: ReactNode;
   childrenBtn: ReactNode;
   childrenAdd: ReactNode;
   childrenFiltraLanc: ReactNode;
+  numLancamentos: ReactNode;
+  vlrTotal: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -84,12 +89,18 @@ export default function SidebarWithHeader({
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} child={childrenBtn} />
+      <MobileNav
+        onOpen={onOpen}
+        child={childrenBtn}
+        valorTotal={vlrTotal}
+        numLanc={numLancamentos}
+      />
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children1}
+        {/* <Box marginTop={50}>{children1}</Box> */}
         <Box
           display={"flex"}
           justifyContent="center"
+          marginTop={50}
           // alignItems="center"
           // bg={"red"}
         >
@@ -189,40 +200,67 @@ const NavItem = ({
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   child: ReactNode;
+  valorTotal: ReactNode;
+  numLanc: ReactNode;
 }
-const MobileNav = ({ onOpen, child, ...rest }: MobileProps) => {
+const MobileNav = ({
+  onOpen,
+  child,
+  valorTotal,
+  numLanc,
+  ...rest
+}: MobileProps) => {
   return (
-    <Flex
-      ml={{ base: 0, md: 60 }}
-      px={{ base: 4, md: 4 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue("white", "gray.900")}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent={{ base: "space-between", md: "flex-end" }}
-      {...rest}
-    >
-      <IconButton
-        display={{ base: "flex", md: "none" }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
+    <Box display={"block"} position="fixed" width={"100%"} zIndex={1}>
+      <Flex
+        ml={{ base: 0, md: 60 }}
+        px={{ base: 4, md: 4 }}
+        height="20"
+        alignItems="center"
+        bg={useColorModeValue("white", "gray.900")}
+        borderBottomWidth="1px"
+        borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+        justifyContent={{ base: "space-between", md: "flex-end" }}
+        {...rest}
+      >
+        <IconButton
+          display={{ base: "flex", md: "none" }}
+          onClick={onOpen}
+          variant="outline"
+          aria-label="open menu"
+          icon={<FiMenu />}
+        />
 
-      <HStack spacing={{ base: "0", md: "6" }}>
-        {child}
-        <Flex alignItems={"center"}>
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: "none" }}
-            ></MenuButton>
-          </Menu>
-        </Flex>
-      </HStack>
-    </Flex>
+        <HStack spacing={{ base: "0", md: "6" }}>
+          <Flex
+            flexDir={{ base: "column", md: "row" }}
+            justifyContent={"flex-end"}
+            alignItems={{ base: "flex-end", md: "center" }}
+          >
+            <Flex>
+              <HStack spacing={3}>
+                <Text as={"b"}>Nº Lanc:</Text>
+                <Text>{numLanc}</Text>
+              </HStack>
+              <HStack marginLeft={5} marginRight={5} spacing={3}>
+                <Text as={"b"}>Vlr Total:</Text>
+                <Text>{valorTotal}</Text>
+              </HStack>
+            </Flex>
+
+            {child}
+          </Flex>
+          {/* <Flex alignItems={"center"}>
+            <Menu>
+              <MenuButton
+                py={2}
+                transition="all 0.3s"
+                _focus={{ boxShadow: "none" }}
+              ></MenuButton>
+            </Menu>
+          </Flex> */}
+        </HStack>
+      </Flex>
+    </Box>
   );
 };

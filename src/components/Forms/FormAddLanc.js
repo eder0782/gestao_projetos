@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   Flex,
+  Textarea,
 } from "@chakra-ui/react";
 import { Collapse } from "@chakra-ui/react";
 
@@ -66,7 +67,7 @@ export default function FormAddLanc(props) {
               placeholder="Fornecedor...."
             />
             <FormLabel>Descrição</FormLabel>
-            <Input
+            <Textarea
               value={props.descric.toLowerCase()}
               onChange={(e) =>
                 //converte o texto para minúsculo
