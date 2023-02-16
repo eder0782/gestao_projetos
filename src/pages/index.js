@@ -9,6 +9,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { database, storage_name, db_name, storage } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
 import FiltrarDespesas from "@/components/FiltrarDespesas";
+import CardDespesas from "@/components/Cards/CardDespesas";
 // import { collection, addDoc } from "firebase/firestore";
 import { useToast } from "@chakra-ui/react";
 import {
@@ -341,7 +342,7 @@ export default function Home() {
           />
         }
         children2={
-          <Tabela
+          <CardDespesas
             dados={dadosFiltrados}
             delete={handleDelDespesas}
             edit={handleEdit}
