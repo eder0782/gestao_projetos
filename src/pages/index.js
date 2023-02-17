@@ -66,7 +66,7 @@ export default function Home() {
 
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
-    setDadosFiltrados(dados);
+    setDadosFiltrados(ordenarPordata(dados));
     setTimeout(() => {
       setSkeletonLoad(true);
     }, 4000);
@@ -140,7 +140,17 @@ export default function Home() {
 
     // deleteDoc(doc(database, "despesas", id))
   };
-
+  function ordenarPordata(dadosOrdenados) {
+    dadosOrdenados.sort(function (a, b) {
+      if (a.data > b.data) {
+        return -1;
+      } else {
+        return true;
+      }
+    });
+    console.log(dadosOrdenados);
+    return dadosOrdenados;
+  }
   //realiza o filtro dos dados, monitorando o state inputFiltrar
   useEffect(() => {
     if (inputFiltrar !== "") {
@@ -149,15 +159,15 @@ export default function Home() {
           item.fornecedor.includes(inputFiltrar.toUpperCase())
         );
 
-        setDadosFiltrados(filtro);
+        setDadosFiltrados(ordenarPordata(filtro));
       } else {
         let filtro = dados.filter((item) =>
           item.descric.includes(inputFiltrar.toLowerCase())
         );
 
-        setDadosFiltrados(filtro);
+        setDadosFiltrados(ordenarPordata(filtro));
       }
-    } else setDadosFiltrados(dados);
+    } else setDadosFiltrados(ordenarPordata(dados));
   }, [inputFiltrar]);
 
   const handleSubmit = async (fileName) => {

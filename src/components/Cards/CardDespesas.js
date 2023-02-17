@@ -80,7 +80,8 @@ export default function CardDespesas(props) {
                 <Skeleton fadeDuration={4} isLoaded={props.skeletonLoad}>
                   <Flex
                     width={"100%"}
-                    bg={"teal"}
+                    // bg={"teal"}
+                    backgroundColor="blackAlpha.900"
                     justifyContent={"space-between"}
                     height="3rem"
                     color={"white"}
@@ -105,10 +106,12 @@ export default function CardDespesas(props) {
                     align={"flex-start"}
                     height={{ base: "auto", md: "8rem" }}
                   >
-                    <HStack spacing={"10px"}>
-                      <Text as={"b"}>Fornecedor:</Text>
+                    <Flex spacing={"10px"}>
+                      <Text as={"b"} marginRight="10px">
+                        Fornecedor:
+                      </Text>
                       <Text>{item.fornecedor}</Text>
-                    </HStack>
+                    </Flex>
                     <Flex spacing={"10px"}>
                       <Text as={"b"} marginRight="10px">
                         Descrição:
@@ -116,10 +119,10 @@ export default function CardDespesas(props) {
                       <Text>{item.descric}</Text>
                     </Flex>
                     <HStack spacing={"10px"}>
-                      <Text as={"b"}>Arquivo:</Text>
+                      <Text as={"b"}>Documento:</Text>
                       <Text>
                         {item.fileURL ? (
-                          <Badge variant="solid" colorScheme="green">
+                          <Badge variant="solid" colorScheme="blue">
                             <a
                               href={item.fileURL}
                               target="_blank"
@@ -129,7 +132,7 @@ export default function CardDespesas(props) {
                             </a>
                           </Badge>
                         ) : (
-                          <Badge variant="solid" colorScheme="red">
+                          <Badge variant="solid" colorScheme="purple">
                             INDISPONÍVEL
                           </Badge>
                         )}
@@ -140,7 +143,7 @@ export default function CardDespesas(props) {
                   {/* <CardFooter> */}
                   <CardFooter justifyContent={"space-around"}>
                     <Button
-                      colorScheme="teal"
+                      colorScheme="blue"
                       width={"8rem"}
                       onClick={() => props.edit(item)}
                       //   onClick={() => props.submit(fileRef)}
@@ -153,7 +156,7 @@ export default function CardDespesas(props) {
                         setIdDelete(item.key);
                         onOpen();
                       }}
-                      colorScheme="red"
+                      colorScheme="purple"
                     >
                       Excluir
                     </Button>

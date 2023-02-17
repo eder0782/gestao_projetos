@@ -94,6 +94,7 @@ export default function SidebarWithHeader({
         child={childrenBtn}
         valorTotal={vlrTotal}
         numLanc={numLancamentos}
+        backgroundColor="blackAlpha.900"
       />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* <Box marginTop={50}>{children1}</Box> */}
@@ -122,7 +123,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue("blackAlpha.900", "gray.900")}
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       w={{ base: "full", md: 60 }}
@@ -131,10 +132,19 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Text
+          color={"white"}
+          fontSize="2xl"
+          fontFamily="monospace"
+          fontWeight="bold"
+        >
           Logo
         </Text>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+        <CloseButton
+          display={{ base: "flex", md: "none" }}
+          color={"white"}
+          onClick={onClose}
+        />
       </Flex>
       {LinkItems.map((link) => (
         <NavItem
@@ -185,13 +195,14 @@ const NavItem = ({
           <Icon
             mr="4"
             fontSize="16"
+            color={"white"}
             _groupHover={{
               color: "white",
             }}
             as={icon}
           />
         )}
-        {children}
+        <Text color={"white"}>{children}</Text>
       </Flex>
     </Link>
   );
@@ -229,6 +240,11 @@ const MobileNav = ({
           variant="outline"
           aria-label="open menu"
           icon={<FiMenu />}
+          color={"white"}
+          _hover={{
+            background: "white",
+            color: "black",
+          }}
         />
 
         <HStack spacing={{ base: "0", md: "6" }}>
@@ -239,12 +255,16 @@ const MobileNav = ({
           >
             <Flex>
               <HStack spacing={3}>
-                <Text as={"b"}>Nº Lanc:</Text>
-                <Text>{numLanc}</Text>
+                <Text color={"white"} as={"b"}>
+                  Nº Lanc:
+                </Text>
+                <Text color={"white"}>{numLanc}</Text>
               </HStack>
               <HStack marginLeft={5} marginRight={5} spacing={3}>
-                <Text as={"b"}>Vlr Total:</Text>
-                <Text>{valorTotal}</Text>
+                <Text color={"white"} as={"b"}>
+                  Vlr Total:
+                </Text>
+                <Text color={"white"}>{valorTotal}</Text>
               </HStack>
             </Flex>
 

@@ -25,6 +25,7 @@ import {
   Center,
   InputGroup,
   InputLeftElement,
+  color,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import {
@@ -55,7 +56,8 @@ export default function NavAdd(props) {
         size="lg"
         variant="ghost"
         aria-label="open menu"
-        icon={<FiRefreshCcw size="1.5em" />}
+        colorScheme={"blackAlpha"}
+        icon={<FiRefreshCcw style={{ color: "white" }} size="1.5em" />}
         onClick={() => {
           props.updateForm();
         }}
@@ -65,7 +67,8 @@ export default function NavAdd(props) {
         size="lg"
         variant="ghost"
         aria-label="open menu"
-        icon={<FiSearch size="1.5em" />}
+        colorScheme={"blackAlpha"}
+        icon={<FiSearch style={{ color: "white" }} size="1.5em" />}
         onClick={() => {
           props.openFiltrar(!props.isOpenFiltrar);
         }}
@@ -76,7 +79,14 @@ export default function NavAdd(props) {
         size="lg"
         variant="ghost"
         aria-label="open menu"
-        icon={<FiPlusCircle size="1.5em" />}
+        colorScheme={"blackAlpha"}
+        icon={
+          <FiPlusCircle
+            style={{ color: "white" }}
+            _hover={{ color: "black" }}
+            size="1.5em"
+          />
+        }
         onClick={props.show}
       />
     </Center>
