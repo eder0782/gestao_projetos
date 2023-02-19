@@ -11,6 +11,7 @@ import { ref, update, push, child, get, remove } from "firebase/database";
 import FiltrarDespesas from "@/components/FiltrarDespesas";
 import CardDespesas from "@/components/Cards/CardDespesas";
 // import { collection, addDoc } from "firebase/firestore";
+import ListView from "@/components/ListView";
 import { useToast } from "@chakra-ui/react";
 import {
   ref as refStorage,
@@ -63,6 +64,29 @@ export default function Home() {
 
   //controla o estado do skeleton da tabela de despesas
   const [skeletonLoad, setSkeletonLoad] = useState(false);
+
+  //TODA ESSA PARTE É RESPONSÁVEL POR PEGAR O TAMANO DA TELA
+  const [screenSize, getDimension] = useState({
+    dynamicWidth: 0,
+    dynamicHeight: 0,
+  });
+  const setDimension = () => {
+    getDimension({
+      dynamicWidth: window.innerWidth,
+      dynamicHeight: window.innerHeight,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", setDimension);
+    if (screenSize.dynamicHeight === 0) {
+      setDimension();
+    }
+
+    return () => {
+      window.removeEventListener("resize", setDimension);
+    };
+  }, [screenSize]);
 
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
@@ -148,7 +172,7 @@ export default function Home() {
         return true;
       }
     });
-    console.log(dadosOrdenados);
+    // console.log(dadosOrdenados);
     return dadosOrdenados;
   }
   //realiza o filtro dos dados, monitorando o state inputFiltrar
@@ -354,12 +378,21 @@ export default function Home() {
           />
         }
         children2={
-          <CardDespesas
-            dados={dadosFiltrados}
-            delete={handleDelDespesas}
-            edit={handleEdit}
-            skeletonLoad={skeletonLoad}
-          />
+          screenSize.dynamicWidth <= 768 ? (
+            <ListView
+              dados={dadosFiltrados}
+              delete={handleDelDespesas}
+              edit={handleEdit}
+              skeletonLoad={skeletonLoad}
+            />
+          ) : (
+            <Tabela
+              dados={dadosFiltrados}
+              delete={handleDelDespesas}
+              edit={handleEdit}
+              skeletonLoad={skeletonLoad}
+            />
+          )
         }
         childrenAdd={
           <FormAddLanc

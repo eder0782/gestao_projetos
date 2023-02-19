@@ -44,13 +44,13 @@ export default function FiltrarDespesas(props) {
           width="90%"
           borderRadius={"md"}
           px={{ base: 2, md: 4 }}
-          py={"5"}
+          py={{ base: 2, md: 4 }}
           shadow={"lg"}
         >
           <Flex justifyContent={"flex-end"}>
             <CloseButton
               color={"#ffffff"}
-              bgColor={"red"}
+              bgColor={"purple"}
               size="md"
               onClick={() => handleCancelar()}
             />
@@ -78,9 +78,6 @@ export default function FiltrarDespesas(props) {
                 ref={consulta}
                 size="md"
               />
-              <FormHelperText>
-                Escolha a forma de consulta de escreva...
-              </FormHelperText>
             </Stack>
           </FormControl>
         </Box>

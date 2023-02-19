@@ -73,16 +73,18 @@ function Tabela(props) {
       <Box marginTop="10" width="90%">
         <Skeleton fadeDuration={4} isLoaded={props.skeletonLoad}>
           <TableContainer>
-            <Table variant="striped" colorScheme="teal">
+            <Table variant="striped" colorScheme="blackAlpha">
               <TableCaption>Imperial to metric conversion factors</TableCaption>
-              <Thead>
+              <Thead bg={"blackAlpha.900"}>
                 <Tr>
-                  <Th>Data</Th>
-                  <Th>Fornecedor</Th>
-                  <Th>Descrição</Th>
-                  <Th isNumeric>Valor</Th>
-                  <Th>Arquivo</Th>
-                  <Th>Ação</Th>
+                  <Th color={"white"}>Data</Th>
+                  <Th color={"white"}>Fornecedor</Th>
+                  <Th color={"white"}>Descrição</Th>
+                  <Th isNumeric color={"white"}>
+                    Valor
+                  </Th>
+                  <Th color={"white"}>Arquivo</Th>
+                  <Th color={"white"}>Ação</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -90,9 +92,13 @@ function Tabela(props) {
                   props.dados.map((item) => {
                     return (
                       <Tr key={item.key}>
-                        <Td>{item.data}</Td>
-                        <Td whiteSpace={"pre-wrap"}>{item.fornecedor}</Td>
-                        <Td whiteSpace={"pre-wrap"}>{item.descric}</Td>
+                        <Td fontSize={15}>{item.data}</Td>
+                        <Td whiteSpace={"pre-wrap"} fontSize={12}>
+                          {item.fornecedor}
+                        </Td>
+                        <Td whiteSpace={"pre-wrap"} fontSize={15}>
+                          {item.descric}
+                        </Td>
                         <Td isNumeric>
                           {parseFloat(item.valor).toLocaleString("pt-br", {
                             minimumFractionDigits: 2,
@@ -100,7 +106,7 @@ function Tabela(props) {
                         </Td>
                         <Td>
                           {item.fileURL ? (
-                            <Badge variant="solid" colorScheme="green">
+                            <Badge variant="solid" colorScheme="blue">
                               <a
                                 href={item.fileURL}
                                 target="_blank"
@@ -110,7 +116,7 @@ function Tabela(props) {
                               </a>
                             </Badge>
                           ) : (
-                            <Badge variant="solid" colorScheme="red">
+                            <Badge variant="solid" colorScheme="purple">
                               INDISPONÍVEL
                             </Badge>
                           )}
@@ -118,14 +124,14 @@ function Tabela(props) {
                         <Td>
                           <HStack>
                             <Button
-                              colorScheme="teal"
+                              colorScheme="blue"
                               onClick={() => props.edit(item)}
                               // leftIcon={}
                             >
                               <FiEdit />
                             </Button>
                             <Button
-                              colorScheme="red"
+                              colorScheme="purple"
                               onClick={() => {
                                 setIdDelete(item.key);
                                 onOpen();

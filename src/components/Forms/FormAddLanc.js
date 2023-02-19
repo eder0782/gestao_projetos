@@ -112,13 +112,13 @@ export default function FormAddLanc(props) {
             />
             <Flex justifyContent={"space-around"} marginTop={"5"}>
               <Button
-                colorScheme="teal"
+                colorScheme="blue"
                 width={"8rem"}
                 onClick={() => props.submit(fileRef)}
               >
                 Salvar
               </Button>
-              <Button width={"8rem"} colorScheme="red" onClick={Cancelar}>
+              <Button width={"8rem"} colorScheme="purple" onClick={Cancelar}>
                 Cancelar
               </Button>
             </Flex>
