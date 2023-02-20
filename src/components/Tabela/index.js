@@ -35,6 +35,14 @@ function Tabela(props) {
   const [idDelete, setIdDelete] = useState(null);
   const initialRef = useRef(null);
 
+  const formatData = (data) => {
+    let data_format = new Date(data);
+    data_format.setDate(data_format.getDate() + 1);
+    // console.log(props.data);
+    // console.log(data_format);
+    return data_format.toLocaleDateString();
+  };
+
   const deletar = () => {
     props.delete(idDelete);
     onClose();
@@ -92,7 +100,7 @@ function Tabela(props) {
                   props.dados.map((item) => {
                     return (
                       <Tr key={item.key}>
-                        <Td fontSize={15}>{item.data}</Td>
+                        <Td fontSize={15}>{formatData(item.data)}</Td>
                         <Td whiteSpace={"pre-wrap"} fontSize={12}>
                           {item.fornecedor}
                         </Td>

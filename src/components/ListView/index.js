@@ -56,6 +56,14 @@ function CollapseButton(props) {
 function ItemList(props) {
   const { isOpen, onToggle } = useDisclosure();
 
+  const formatData = (data) => {
+    let data_format = new Date(data);
+    data_format.setDate(data_format.getDate() + 1);
+    // console.log(props.data);
+    // console.log(data_format);
+    return data_format.toLocaleDateString();
+  };
+
   return (
     <ListItem
       borderRadius={"md"}
@@ -74,12 +82,12 @@ function ItemList(props) {
             borderTopLeftRadius={"md"}
             p={2}
           >
-            <HStack>
+            <HStack maxW={5}>
               {/* <Text fontWeight={"bold"} fontSize="md" color="white">
                 Data:
               </Text> */}
               <Text fontWeight={"bold"} fontSize="md" color="white">
-                {props.data}
+                {formatData(props.data)}
               </Text>
             </HStack>
             <HStack>
