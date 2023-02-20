@@ -431,7 +431,7 @@ export default function Home() {
           />
         }
       />
-      <Link href="/login"> Login</Link>
+      
     </div>
   );
 }
