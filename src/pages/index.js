@@ -11,6 +11,7 @@ import { ref, update, push, child, get, remove } from "firebase/database";
 import FiltrarDespesas from "@/components/FiltrarDespesas";
 import CardDespesas from "@/components/Cards/CardDespesas";
 // import { collection, addDoc } from "firebase/firestore";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import ListView from "@/components/ListView";
 import { useToast } from "@chakra-ui/react";
 import {
@@ -19,10 +20,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
-
-import { async } from "@firebase/util";
-import { resolve } from "styled-jsx/css";
-// import firebase from "../services/firebase";
 
 export default function Home() {
   //controla o estado o componente FormAddLanc
@@ -65,28 +62,8 @@ export default function Home() {
   //controla o estado do skeleton da tabela de despesas
   const [skeletonLoad, setSkeletonLoad] = useState(false);
 
-  //TODA ESSA PARTE É RESPONSÁVEL POR PEGAR O TAMANO DA TELA
-  const [screenSize, getDimension] = useState({
-    dynamicWidth: 0,
-    dynamicHeight: 0,
-  });
-  const setDimension = () => {
-    getDimension({
-      dynamicWidth: window.innerWidth,
-      dynamicHeight: window.innerHeight,
-    });
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", setDimension);
-    if (screenSize.dynamicHeight === 0) {
-      setDimension();
-    }
-
-    return () => {
-      window.removeEventListener("resize", setDimension);
-    };
-  }, [screenSize]);
+  //UTILIZA O HOOKS CUSTOMIZADO PARA PEGAR A LARGURA E ALTURA DA TELA
+  const screenSize = useScreenSize();
 
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
@@ -431,7 +408,6 @@ export default function Home() {
           />
         }
       />
-      
     </div>
   );
 }
