@@ -21,7 +21,7 @@ import {
 } from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
 
-export default function Lancamentos() {
+export default function Lancamentos(props) {
   //controla o estado o componente FormAddLanc
   const { isOpen, onOpen, onClose } = useDisclosure();
 
