@@ -70,7 +70,7 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box minH="100%" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
@@ -254,18 +254,26 @@ const MobileNav = ({
             alignItems={{ base: "flex-end", md: "center" }}
           >
             <Flex>
-              <HStack spacing={3}>
-                <Text color={"white"} as={"b"}>
-                  Nº Lanc:
-                </Text>
-                <Text color={"white"}>{numLanc}</Text>
-              </HStack>
-              <HStack marginLeft={5} marginRight={5} spacing={3}>
-                <Text color={"white"} as={"b"}>
-                  Vlr Total:
-                </Text>
-                <Text color={"white"}>{valorTotal}</Text>
-              </HStack>
+              {numLanc ? (
+                <HStack spacing={3}>
+                  <Text color={"white"} as={"b"}>
+                    Nº Lanc:
+                  </Text>
+                  <Text color={"white"}>{numLanc}</Text>
+                </HStack>
+              ) : (
+                <></>
+              )}
+              {valorTotal ? (
+                <HStack marginLeft={5} marginRight={5} spacing={3}>
+                  <Text color={"white"} as={"b"}>
+                    Vlr Total:
+                  </Text>
+                  <Text color={"white"}>{valorTotal}</Text>
+                </HStack>
+              ) : (
+                <></>
+              )}
             </Flex>
 
             {child}
