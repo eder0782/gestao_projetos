@@ -7,18 +7,16 @@ import {
   Button,
   Box,
   Flex,
-  Textarea,
 } from "@chakra-ui/react";
 import { Collapse } from "@chakra-ui/react";
 
 export default function FormProjetos(props) {
-  const [fileName, setFileName] = useState([]);
   const inpRef = useRef(null);
   const fileRef = useRef(null);
   function Cancelar() {
     props.setInicio("");
     props.setProjeto("");
-    props.vlrProjeto("");
+    props.setVlrProjeto("");
 
     props.close();
   }
@@ -62,7 +60,7 @@ export default function FormProjetos(props) {
               }
               type="text"
               borderColor={"blackAlpha.600"}
-              placeholder="Fornecedor...."
+              placeholder="Nome do Projeto...."
             />
 
             <Flex justifyContent={"space-between"}>
@@ -88,20 +86,12 @@ export default function FormProjetos(props) {
               </Box>
             </Flex>
             <FormLabel>Arquivo</FormLabel>
-            <Input
-              type="file"
-              value={fileName}
-              onChange={(e) => {
-                setFileName(e.currentTarget.value);
-              }}
-              ref={fileRef}
-              borderColor={"blackAlpha.600"}
-            />
+
             <Flex justifyContent={"space-around"} marginTop={"5"}>
               <Button
                 colorScheme="blue"
                 width={"8rem"}
-                onClick={() => props.submit(fileRef)}
+                onClick={() => props.submit()}
               >
                 Salvar
               </Button>

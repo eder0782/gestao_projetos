@@ -8,7 +8,7 @@ import ModalProgress from "@/components/ModalProgress";
 import { useDisclosure } from "@chakra-ui/react";
 import { database, storage_name, db_name, storage } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
-import FiltrarDespesas from "@/components/FiltrarDespesas";
+import FiltrarDespesas from "@/components/Consultas/FIltrarDespesas";
 import CardDespesas from "@/components/Cards/CardDespesas";
 // import { collection, addDoc } from "firebase/firestore";
 import { useScreenSize } from "@/hooks/useScreenSize";
@@ -84,6 +84,33 @@ export default function Lancamentos(props) {
     } else setValorTotal(0);
   }, [dadosFiltrados]);
 
+
+  //realiza o filtro dos dados, monitorando o state inputFiltrar
+  useEffect(() => {
+    if (inputFiltrar !== "") {
+      if (filtrarPor === "F") {
+        let filtro = dados.filter((item) =>
+          item.fornecedor.includes(inputFiltrar.toUpperCase())
+        );
+
+        setDadosFiltrados(ordenarPordata(filtro));
+      } else {
+        let filtro = dados.filter((item) =>
+          item.descric.includes(inputFiltrar.toLowerCase())
+        );
+
+        setDadosFiltrados(ordenarPordata(filtro));
+      }
+    } else setDadosFiltrados(ordenarPordata(dados));
+  }, [inputFiltrar]);
+
+
+  useEffect(() => {
+    updateForm();
+  }, []);
+
+
+
   const updateForm = async () => {
     await get(child(ref(database), `/${db_name}/despesas`))
       .then((snapshot) => {
@@ -152,25 +179,7 @@ export default function Lancamentos(props) {
     // console.log(dadosOrdenados);
     return dadosOrdenados;
   }
-  //realiza o filtro dos dados, monitorando o state inputFiltrar
-  useEffect(() => {
-    if (inputFiltrar !== "") {
-      if (filtrarPor === "F") {
-        let filtro = dados.filter((item) =>
-          item.fornecedor.includes(inputFiltrar.toUpperCase())
-        );
-
-        setDadosFiltrados(ordenarPordata(filtro));
-      } else {
-        let filtro = dados.filter((item) =>
-          item.descric.includes(inputFiltrar.toLowerCase())
-        );
-
-        setDadosFiltrados(ordenarPordata(filtro));
-      }
-    } else setDadosFiltrados(ordenarPordata(dados));
-  }, [inputFiltrar]);
-
+  
   const handleSubmit = async (fileName) => {
     // e.preventDefault();
     // console.log();
@@ -335,10 +344,7 @@ export default function Lancamentos(props) {
     } else onOpen();
   };
 
-  useEffect(() => {
-    updateForm();
-  }, []);
-  return (
+    return (
     <div>
       {/* <WithSubnavigation />
       <BasicStatistics />

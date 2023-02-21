@@ -44,9 +44,9 @@ interface LinkItemProps {
   ref: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Home", icon: FiHome, ref: "/" },
+  { name: "Projetos", icon: FiHome, ref: "/projetos" },
   { name: "Fornecedores", icon: FiTrendingUp, ref: "/fornecedor" },
-  { name: "Explore", icon: FiCompass, ref: "#" },
+  { name: "Lançamentos", icon: FiCompass, ref: "/lancamentos" },
   { name: "Favourites", icon: FiStar, ref: "#" },
   { name: "Settings", icon: FiSettings, ref: "#" },
 ];
@@ -70,7 +70,7 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100%" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}

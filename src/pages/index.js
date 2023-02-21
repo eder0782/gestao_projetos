@@ -3,7 +3,7 @@ import Router from "next/router";
 export default function Home({ params }) {
   // return null;
   if (typeof window !== "undefined") {
-    Router.push("/lancamentos");
+    Router.push("/projetos");
   }
   return (
     <>
