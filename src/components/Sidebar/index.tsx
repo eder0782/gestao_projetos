@@ -59,6 +59,7 @@ export default function SidebarWithHeader({
   childrenFiltraLanc,
   numLancamentos,
   vlrTotal,
+  tituloPagina,
 }: {
   children1: ReactNode;
   children2: ReactNode;
@@ -67,6 +68,7 @@ export default function SidebarWithHeader({
   childrenFiltraLanc: ReactNode;
   numLancamentos: ReactNode;
   vlrTotal: ReactNode;
+  tituloPagina: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -74,6 +76,7 @@ export default function SidebarWithHeader({
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
+        zIndex={3}
       />
       <Drawer
         autoFocus={false}
@@ -95,13 +98,14 @@ export default function SidebarWithHeader({
         valorTotal={vlrTotal}
         numLanc={numLancamentos}
         backgroundColor="blackAlpha.900"
+        titulo={tituloPagina}
       />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* <Box marginTop={50}>{children1}</Box> */}
         <Box
           display={"flex"}
           justifyContent="center"
-          marginTop={50}
+          marginTop={'6rem'}
           // alignItems="center"
           // bg={"red"}
         >
@@ -213,16 +217,18 @@ interface MobileProps extends FlexProps {
   child: ReactNode;
   valorTotal: ReactNode;
   numLanc: ReactNode;
+  titulo: ReactNode
 }
 const MobileNav = ({
   onOpen,
   child,
   valorTotal,
   numLanc,
+  titulo,
   ...rest
 }: MobileProps) => {
   return (
-    <Box display={"block"} position="fixed" width={"100%"} zIndex={1}>
+    <Box display={"block"} position="fixed" width={"100%"} zIndex={2}>
       <Flex
         ml={{ base: 0, md: 60 }}
         px={{ base: 4, md: 4 }}
@@ -289,6 +295,11 @@ const MobileNav = ({
           </Flex> */}
         </HStack>
       </Flex>
+      <Box bg={"blackAlpha.900"}>
+        <Text padding={2} fontWeight={'bold'}color={'white'} fontSize={20} ml={{ base: 0, md: 60 }}>
+          {titulo}
+        </Text>
+      </Box>
     </Box>
   );
 };
