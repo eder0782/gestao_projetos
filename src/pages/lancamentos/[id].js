@@ -26,7 +26,8 @@ export default function Lancamentos(props) {
   //PEGANDOS O ID NA ROTA
   const router = useRouter();
   const [paramId, setParamId] = useState(router.query.id);
-//   console.log(paramId);
+  const [paramProjName, setParamProjName] = useState(router.query.projName);
+  // console.log(paramProjName);
 
   //controla o estado o componente FormAddLanc
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -358,6 +359,7 @@ export default function Lancamentos(props) {
       <Tabela /> */}
       <ModalProgress isOpen={isOpenModalProgress} />
       <SidebarWithHeader
+        tituloPagina={`PROJETO: ${paramProjName}`}
         numLancamentos={totalItens}
         vlrTotal={valorTotal}
         children1={

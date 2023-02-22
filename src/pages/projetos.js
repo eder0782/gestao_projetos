@@ -129,9 +129,8 @@ export default function Projetos() {
             };
 
             setDados((oldArray) => [...oldArray, data].reverse());
-            
           });
-          console.log(dados);
+          // console.log(dados);
         } else {
           console.log("No data available");
           //setTotalItens(0);
@@ -327,6 +326,7 @@ export default function Projetos() {
         //     skeletonLoad={skeletonLoad}
         //   />
         // }
+        tituloPagina={`LISTA DE PROJETOS`}
         children2={
           <CardProjetos
             dados={dadosFiltrados}
