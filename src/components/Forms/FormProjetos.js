@@ -7,8 +7,10 @@ import {
   Button,
   Box,
   Flex,
+  Icon,
 } from "@chakra-ui/react";
 import { Collapse } from "@chakra-ui/react";
+import { FaSave, FaBan } from "react-icons/fa";
 
 export default function FormProjetos(props) {
   const inpRef = useRef(null);
@@ -93,9 +95,11 @@ export default function FormProjetos(props) {
                 width={"8rem"}
                 onClick={() => props.submit()}
               >
+                <Icon as={FaSave} marginRight={3} />
                 Salvar
               </Button>
               <Button width={"8rem"} colorScheme="purple" onClick={Cancelar}>
+                <Icon as={FaBan} marginRight={3} />
                 Cancelar
               </Button>
             </Flex>

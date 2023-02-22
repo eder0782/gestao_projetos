@@ -11,6 +11,7 @@ import {
   Badge,
   useDisclosure,
   Skeleton,
+  Icon,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -23,6 +24,20 @@ import {
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import {
+  FaTrash,
+  FaBan,
+  FaProjectDiagram,
+  FaExclamationCircle,
+  FaEdit,
+  FaRegCalendarCheck,
+  FaChartLine,
+  FaDollarSign,
+  FaCheckDouble,
+  // FaEye,
+  FaRegFolderOpen,
+} from "react-icons/fa";
+import Link from "next/link";
 
 export default function CardProjetos(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +58,12 @@ export default function CardProjetos(props) {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Confirmar Exclusão!!</ModalHeader>
+          <ModalHeader>
+            <HStack spacing={3}>
+              <Icon color={"red"} as={FaExclamationCircle} />
+              <Text>Confirmar Exclusão!!</Text>
+            </HStack>
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Text>
@@ -53,11 +73,12 @@ export default function CardProjetos(props) {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={deletar} colorScheme="teal" mr={3}>
-              SIM
+            <Button onClick={deletar} colorScheme="blue" mr={3}>
+              <Icon as={FaTrash} marginRight={3} /> Sim
             </Button>
-            <Button ref={initialRef} onClick={onClose} colorScheme="red">
-              NÃO
+            <Button ref={initialRef} onClick={onClose} colorScheme="purple">
+              <Icon as={FaBan} marginRight={3} />
+              Não
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -76,44 +97,156 @@ export default function CardProjetos(props) {
                 key={item.key}
                 marginTop={"10"}
                 borderWidth={2}
-                borderColor={"gray.300"}
-                minW={"90%"}
+                borderColor={"gray"}
+                w={{ base: "100%", lg: "60%" }}
                 // p={5}
                 // shadow="md"
                 borderRadius={"md"}
               >
                 <Skeleton fadeDuration={4} isLoaded={props.skeletonLoad}>
-                  <Flex
-                    width={"100%"}
-                    // bg={"teal"}
-                    backgroundColor="blackAlpha.900"
-                    justifyContent={"center"}
-                    height="3rem"
-                    color={"white"}
-                    paddingLeft={2}
-                    paddingRight={2}
-                    alignItems="center"
-                  >
-                    {/* <Text>Projeto:</Text> */}
-                    <Text>{item.projeto}</Text>
-                  </Flex>
+                  <CardHeader>
+                    <HStack justifyContent={"space-between"}>
+                      <VStack alignItems={"flex-start"}>
+                        <HStack>
+                          <Icon
+                            color={"black"}
+                            h={5}
+                            w={5}
+                            as={FaProjectDiagram}
+                            marginRight={4}
+                          />
+                          <Text
+                            color={"black"}
+                            fontSize={20}
+                            fontWeight={"bold"}
+                            whiteSpace={"pre-wrap"}
+                          >
+                            {item.projeto}
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <Icon
+                            color={"gray"}
+                            h={3}
+                            w={3}
+                            as={FaRegCalendarCheck}
+                            marginRight={4}
+                          />
+                          <Text
+                            color={"gray"}
+                            fontSize={12}
+                            fontWeight={"bold"}
+                          >
+                            INICIO:
+                          </Text>
+                          <Text
+                            color={"gray"}
+                            fontSize={12}
+                            fontWeight={"bold"}
+                          >
+                            {item.inicio}
+                          </Text>
+                        </HStack>
+                      </VStack>
 
+                      <Button colorScheme="blue" variant="outline">
+                        <Link href={`/lancamentos/${item.key}`}>
+                          Abrir
+                          <Icon
+                            marginLeft={2}
+                            h={5}
+                            w={5}
+                            as={FaRegFolderOpen}
+                          />
+                        </Link>
+                      </Button>
+                    </HStack>
+
+                    <Divider
+                      style={{ border: "1px solid", borderColor: "gray.300" }}
+                    />
+                  </CardHeader>
                   <CardBody
-                    align={"flex-start"}
+                    align={"flex-end"}
                     // height={{ base: "auto", md: "8rem" }}
                   >
-                    <Flex spacing={"10px"}>
-                      <Text as={"b"} marginRight="10px">
-                        Inicio:
-                      </Text>
-                      <Text>{item.inicio}</Text>
-                    </Flex>
-                    <Flex spacing={"10px"}>
-                      <Text as={"b"} marginRight="10px">
-                        Previsto:
-                      </Text>
-                      <Text>{item.vlrProjeto}</Text>
-                    </Flex>
+                    <HStack
+                      justifyContent={{
+                        base: "space-between",
+                        lg: "space-around",
+                      }}
+                    >
+                      <VStack spacing={"10px"}>
+                        <HStack>
+                          <Icon
+                            color={"gray"}
+                            h={3}
+                            w={3}
+                            as={FaChartLine}
+                            marginRight={4}
+                          />
+                          <Text
+                            color={"gray"}
+                            fontSize={15}
+                            fontWeight={"bold"}
+                          >
+                            VLR PREVISTO:
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <Icon
+                            color={"black"}
+                            h={5}
+                            w={5}
+                            as={FaDollarSign}
+                            marginRight={4}
+                          />
+                          <Text color={"black"} fontSize={20}>
+                            {parseFloat(item.vlrProjeto).toLocaleString(
+                              "pt-br",
+                              {
+                                minimumFractionDigits: 2,
+                              }
+                            )}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                      <VStack spacing={"10px"}>
+                        <HStack>
+                          <Icon
+                            color={"gray"}
+                            h={3}
+                            w={3}
+                            as={FaCheckDouble}
+                            marginRight={4}
+                          />
+                          <Text
+                            color={"gray"}
+                            fontSize={15}
+                            fontWeight={"bold"}
+                          >
+                            VLR REALIZADO:
+                          </Text>
+                        </HStack>
+                        <HStack>
+                          <Icon
+                            color={"black"}
+                            h={5}
+                            w={5}
+                            as={FaDollarSign}
+                            marginRight={4}
+                          />
+                          <Text color={"black"} fontSize={20}>
+                            {parseFloat(item.vlrRealizado).toLocaleString(
+                              "pt-br",
+                              {
+                                minimumFractionDigits: 2,
+                              }
+                            )}
+                          </Text>
+                        </HStack>
+                      </VStack>
+                    </HStack>
                   </CardBody>
 
                   {/* <CardFooter> */}
@@ -124,6 +257,7 @@ export default function CardProjetos(props) {
                       onClick={() => props.edit(item)}
                       //   onClick={() => props.submit(fileRef)}
                     >
+                      <Icon as={FaEdit} marginRight={3} />
                       Editar
                     </Button>
                     <Button
@@ -134,6 +268,7 @@ export default function CardProjetos(props) {
                       }}
                       colorScheme="purple"
                     >
+                      <Icon as={FaTrash} marginRight={3} />
                       Excluir
                     </Button>
                     {/* </Flex> */}

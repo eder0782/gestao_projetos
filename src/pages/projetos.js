@@ -108,19 +108,30 @@ export default function Projetos() {
         if (snapshot.exists()) {
           //   console.log(snapshot.val());
           snapshot.forEach((item) => {
+            //REALIZANDO A SOMA DOS LANÇAMENTOS DOS PROJETOS
+            let Sum = 0;
+            let desp = item.val().despesas;
+            if (desp) {
+              // console.log(desp);
+              Object.keys(desp).forEach((ele) => {
+                // console.log(desp[ele].valor)
+                Sum += parseFloat(desp[ele].valor);
+              });
+            }
+            //GERANDO O OBJETO QUE FICARÁ DENTRO DO SETDADOS
             var data = {
               key: item.key,
               projeto: item.val().projeto,
               inicio: item.val().inicio,
               vlrProjeto: item.val().vlrProjeto,
               despesas: item.val().despesas,
-              //   valor: item.val().valor,
-              //   fileURL: item.val().fileURL,
+              vlrRealizado: Sum,
             };
 
             setDados((oldArray) => [...oldArray, data].reverse());
+            
           });
-            // console.log(dados);
+          console.log(dados);
         } else {
           console.log("No data available");
           //setTotalItens(0);
@@ -180,8 +191,6 @@ export default function Projetos() {
     if (projeto !== "" && inicio !== "" && vlrProjeto !== "") {
       //ATIVANDO O MODAL PROGRESS
       setOpenModalProgress(true);
-
-      
 
       const lancamento = {
         inicio,
@@ -288,7 +297,7 @@ export default function Projetos() {
     setId(item.key);
     setProjeto(item.projeto);
     setInicio(item.inicio);
-    setDespesas(item.despesas)
+    setDespesas(item.despesas);
     // setFornecedor(item.fornecedor);
     setVlrProjeto(item.vlrProjeto);
     // setFileURL(item.fileURL);
