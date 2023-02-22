@@ -38,15 +38,20 @@ import {
   FaRegFolderOpen,
 } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function CardProjetos(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [idDelete, setIdDelete] = useState(null);
   const initialRef = useRef(null);
+  const routes = useRouter();
   // console.log(props.dados)
   const deletar = () => {
     props.delete(idDelete);
     onClose();
+  };
+  const redirecionar = (projId, projName) => {
+    routes(`/lançamentos/${projId}`);
   };
   return (
     <Center>
@@ -107,7 +112,7 @@ export default function CardProjetos(props) {
                   <CardHeader>
                     <HStack justifyContent={"space-between"}>
                       <VStack alignItems={"flex-start"}>
-                        <HStack>
+                        <HStack justifyContent={"center"}>
                           <Icon
                             color={"black"}
                             h={5}
@@ -117,9 +122,10 @@ export default function CardProjetos(props) {
                           />
                           <Text
                             color={"black"}
-                            fontSize={20}
+                            fontSize={{ base: 16, md: 20 }}
                             fontWeight={"bold"}
                             whiteSpace={"pre-wrap"}
+                            // minH={20}
                           >
                             {item.projeto}
                           </Text>
@@ -148,18 +154,6 @@ export default function CardProjetos(props) {
                           </Text>
                         </HStack>
                       </VStack>
-
-                      <Button colorScheme="blue" variant="outline">
-                        <Link href={`/lancamentos/${item.key}`}>
-                          Abrir
-                          <Icon
-                            marginLeft={2}
-                            h={5}
-                            w={5}
-                            as={FaRegFolderOpen}
-                          />
-                        </Link>
-                      </Button>
                     </HStack>
 
                     <Divider
@@ -173,35 +167,23 @@ export default function CardProjetos(props) {
                     <HStack
                       justifyContent={{
                         base: "space-between",
-                        lg: "space-around",
+                        md: "space-around",
                       }}
                     >
                       <VStack spacing={"10px"}>
                         <HStack>
-                          <Icon
-                            color={"gray"}
-                            h={3}
-                            w={3}
-                            as={FaChartLine}
-                            marginRight={4}
-                          />
+                          <Icon color={"gray"} h={3} w={3} as={FaChartLine} />
                           <Text
                             color={"gray"}
-                            fontSize={15}
+                            fontSize={{ base: 12, md: 15 }}
                             fontWeight={"bold"}
                           >
                             VLR PREVISTO:
                           </Text>
                         </HStack>
                         <HStack>
-                          <Icon
-                            color={"black"}
-                            h={5}
-                            w={5}
-                            as={FaDollarSign}
-                            marginRight={4}
-                          />
-                          <Text color={"black"} fontSize={20}>
+                          <Icon color={"black"} h={5} w={5} as={FaDollarSign} />
+                          <Text color={"black"} fontSize={{ base: 17, md: 20 }}>
                             {parseFloat(item.vlrProjeto).toLocaleString(
                               "pt-br",
                               {
@@ -213,30 +195,18 @@ export default function CardProjetos(props) {
                       </VStack>
                       <VStack spacing={"10px"}>
                         <HStack>
-                          <Icon
-                            color={"gray"}
-                            h={3}
-                            w={3}
-                            as={FaCheckDouble}
-                            marginRight={4}
-                          />
+                          <Icon color={"gray"} h={3} w={3} as={FaCheckDouble} />
                           <Text
                             color={"gray"}
-                            fontSize={15}
+                            fontSize={{ base: 12, md: 15 }}
                             fontWeight={"bold"}
                           >
                             VLR REALIZADO:
                           </Text>
                         </HStack>
                         <HStack>
-                          <Icon
-                            color={"black"}
-                            h={5}
-                            w={5}
-                            as={FaDollarSign}
-                            marginRight={4}
-                          />
-                          <Text color={"black"} fontSize={20}>
+                          <Icon color={"black"} h={5} w={5} as={FaDollarSign} />
+                          <Text color={"black"} fontSize={{ base: 17, md: 20 }}>
                             {parseFloat(item.vlrRealizado).toLocaleString(
                               "pt-br",
                               {
@@ -260,17 +230,19 @@ export default function CardProjetos(props) {
                       <Icon as={FaEdit} marginRight={3} />
                       Editar
                     </Button>
-                    <Button
-                      width={"8rem"}
-                      onClick={() => {
-                        setIdDelete(item.key);
-                        onOpen();
-                      }}
-                      colorScheme="purple"
-                    >
-                      <Icon as={FaTrash} marginRight={3} />
-                      Excluir
-                    </Button>
+                    <Link href={`/lancamentos/${item.key}/?projName=${item.projeto}`}>
+                      <Button
+                        leftIcon={FaRegFolderOpen}
+                        width={"8rem"}
+                        colorScheme="blue"
+                        variant="outline"
+                      >
+                        {/* <Link href={`/lancamentos/${item.key}`}> */}
+                        <Icon marginRight={3} as={FaRegFolderOpen} />
+                        Abrir
+                        {/* </Link> */}
+                      </Button>
+                    </Link>
                     {/* </Flex> */}
                   </CardFooter>
                 </Skeleton>
