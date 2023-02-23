@@ -46,7 +46,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Projetos", icon: FiHome, ref: "/projetos" },
   { name: "Fornecedores", icon: FiTrendingUp, ref: "/fornecedor" },
-  { name: "Lançamentos", icon: FiCompass, ref: "/lancamentos" },
+  { name: "Plano de Contas", icon: FiCompass, ref: "#" },
   { name: "Favourites", icon: FiStar, ref: "#" },
   { name: "Settings", icon: FiSettings, ref: "#" },
 ];
@@ -105,7 +105,7 @@ export default function SidebarWithHeader({
         <Box
           display={"flex"}
           justifyContent="center"
-          marginTop={{base:'6rem',lg:'2rem'}}
+          marginTop={{ base: "6rem", lg: "2rem" }}
           // alignItems="center"
           // bg={"red"}
         >
@@ -217,7 +217,7 @@ interface MobileProps extends FlexProps {
   child: ReactNode;
   valorTotal: ReactNode;
   numLanc: ReactNode;
-  titulo: ReactNode
+  titulo: ReactNode;
 }
 const MobileNav = ({
   onOpen,
@@ -232,12 +232,16 @@ const MobileNav = ({
       <Flex
         ml={{ base: 0, md: 60 }}
         px={{ base: 4, md: 4 }}
-        minH={'3rem'}
+        minH={"3rem"}
         alignItems="center"
         bg={useColorModeValue("white", "gray.900")}
         borderBottomWidth="1px"
         borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-        justifyContent={{ base: "space-between",md:'flex-end', lg: "space-between" }}
+        justifyContent={{
+          base: "space-between",
+          md: "flex-end",
+          lg: "space-between",
+        }}
         {...rest}
       >
         <IconButton
@@ -252,42 +256,60 @@ const MobileNav = ({
             color: "black",
           }}
         />
-        <Flex display={{base:'none', lg:'flex'}} flexDir={{xl:'row',lg:'column'}}>
-        <Text fontWeight={'bold'}color={'white'} marginRight={2} fontSize={15} >{titulo}</Text>
-        <Flex>
-              {numLanc ? (
-                <HStack spacing={1}>
-                  <Text fontSize={15} fontWeight={'bold'}  color={"white"}>|</Text>
-                  <Text marginLeft={3} color={"white"} fontSize={15} as={"b"}>
-                    Nº Lanc:
-                  </Text>
-                  <Text fontSize={15} fontWeight={'bold'}  color={"white"}>{numLanc}</Text>
-                </HStack>
-              ) : (
-                <></>
-              )}
-              {valorTotal ? (
-                <HStack marginLeft={5} marginRight={5} spacing={1}>
-                  <Text fontSize={15} color={"white"} as={"b"}>
-                    Vlr Total:
-                  </Text>
-                  <Text fontSize={15} fontWeight={'bold'} color={"white"}>{valorTotal}</Text>
-                </HStack>
-              ) : (
-                <></>
-              )}
-            </Flex>
-
-
+        <Flex
+          display={{ base: "none", lg: "flex" }}
+          flexDir={{ xl: "row", lg: "column" }}
+        >
+          <Text
+            fontWeight={"bold"}
+            color={"white"}
+            marginRight={2}
+            fontSize={15}
+          >
+            {titulo}
+          </Text>
+          <Flex>
+            {numLanc ? (
+              <HStack spacing={1}>
+                <Text fontSize={15} fontWeight={"bold"} color={"white"}>
+                  |
+                </Text>
+                <Text
+                  marginLeft={3}
+                  color={"white"}
+                  fontSize={15}
+                  fontWeight={"bold"}
+                >
+                  Nº Lanc:
+                </Text>
+                <Text fontSize={15} fontWeight={"bold"} color={"white"}>
+                  {numLanc}
+                </Text>
+              </HStack>
+            ) : (
+              <></>
+            )}
+            {valorTotal ? (
+              <HStack marginLeft={5} marginRight={5} spacing={1}>
+                <Text fontSize={15} color={"white"} as={"b"}>
+                  Vlr Total:
+                </Text>
+                <Text fontSize={15} fontWeight={"bold"} color={"white"}>
+                  {valorTotal}
+                </Text>
+              </HStack>
+            ) : (
+              <></>
+            )}
+          </Flex>
         </Flex>
-        
+
         <HStack spacing={{ base: "0", md: "6" }}>
           <Flex
             flexDir={{ base: "column", md: "row" }}
             justifyContent={"flex-end"}
             alignItems={{ base: "flex-end", md: "center" }}
           >
-            
             {child}
           </Flex>
           {/* <Flex alignItems={"center"}>
@@ -301,35 +323,42 @@ const MobileNav = ({
           </Flex> */}
         </HStack>
       </Flex>
-      <Box ml={{ base: 0, md: 60 }} display={{base:'flex', lg:'none'}} justifyContent={'flex-start'} bg={"blackAlpha.900"} flexDir={'column'}>
-        <Text padding={2} fontWeight={'bold'}color={'white'} fontSize={15} >
-
+      <Box
+        ml={{ base: 0, md: 60 }}
+        display={{ base: "flex", lg: "none" }}
+        justifyContent={"flex-start"}
+        bg={"blackAlpha.900"}
+        flexDir={"column"}
+      >
+        <Text padding={2} fontWeight={"bold"} color={"white"} fontSize={15}>
           {titulo}
         </Text>
         <Flex>
-              {numLanc ? (
-                <HStack paddingLeft={2} spacing={3}>
-                  <Text fontWeight={'bold'}color={'white'} fontSize={15}>
-                    Nº Lanc:
-                  </Text>
-                  <Text fontWeight={'bold'}color={'white'} fontSize={15}>{numLanc}</Text>
-                </HStack>
-              ) : (
-                <></>
-              )}
-              {valorTotal ? (
-                <HStack marginLeft={5} marginRight={5} spacing={3}>
-                  <Text fontWeight={'bold'}color={'white'} fontSize={15}>
-                    Vlr Total:
-                  </Text>
-                  <Text  fontWeight={'bold'}color={'white'} fontSize={15}>{valorTotal}</Text>
-                </HStack>
-              ) : (
-                <></>
-              )}
-            </Flex>
-
-
+          {numLanc ? (
+            <HStack paddingLeft={2} spacing={3}>
+              <Text fontWeight={"bold"} color={"white"} fontSize={15}>
+                Nº Lanc:
+              </Text>
+              <Text fontWeight={"bold"} color={"white"} fontSize={15}>
+                {numLanc}
+              </Text>
+            </HStack>
+          ) : (
+            <></>
+          )}
+          {valorTotal ? (
+            <HStack marginLeft={5} marginRight={5} spacing={3}>
+              <Text fontWeight={"bold"} color={"white"} fontSize={15}>
+                Vlr Total:
+              </Text>
+              <Text fontWeight={"bold"} color={"white"} fontSize={15}>
+                {valorTotal}
+              </Text>
+            </HStack>
+          ) : (
+            <></>
+          )}
+        </Flex>
       </Box>
     </Box>
   );
