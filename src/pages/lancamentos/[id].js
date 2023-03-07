@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Router from "next/router";
 import Tabela from "@/components/Tabela";
 import Link from "next/link";
 import BasicStatistics from "@/components/Estatisticas";
@@ -21,6 +22,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
+
 
 export default function Lancamentos(props) {
   //PEGANDOS O ID NA ROTA
@@ -352,6 +354,10 @@ export default function Lancamentos(props) {
     } else onOpen();
   };
 
+  const handlePrint=()=>{
+    Router.push(`/relatorios/despesas`);
+
+  }
   return (
     <div>
       {/* <WithSubnavigation />
@@ -420,6 +426,7 @@ export default function Lancamentos(props) {
             openFiltrar={setShowFiltrar}
             isOpenFiltrar={showFiltrar}
             updateForm={updateForm}
+            print={handlePrint}
           />
         }
       />
