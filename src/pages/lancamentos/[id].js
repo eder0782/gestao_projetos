@@ -22,7 +22,9 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
-
+import ContextLogin from "@/services/contextLogin";
+import { useContext } from "react";
+// import { useRouter } from "next/navigation";
 
 export default function Lancamentos(props) {
   //PEGANDOS O ID NA ROTA
@@ -73,6 +75,16 @@ export default function Lancamentos(props) {
 
   //UTILIZA O HOOKS CUSTOMIZADO PARA PEGAR A LARGURA E ALTURA DA TELA
   const screenSize = useScreenSize();
+
+  //VERIFICA SE O USUÁRIO ESTÁ LOGADO
+  const [logado, setLogado] = useContext(ContextLogin);
+  const routerRedir = useRouter();
+
+  useEffect(() => {
+    if (logado === 0) {
+      routerRedir.replace("/login");
+    }
+  }, []);
 
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
@@ -354,82 +366,84 @@ export default function Lancamentos(props) {
     } else onOpen();
   };
 
-  const handlePrint=()=>{
+  const handlePrint = () => {
     Router.push(`/relatorios/despesas`);
-
-  }
+  };
   return (
     <div>
-      {/* <WithSubnavigation />
-      <BasicStatistics />
-      <Tabela /> */}
-      <ModalProgress isOpen={isOpenModalProgress} />
-      <SidebarWithHeader
-        tituloPagina={`PROJETO: ${paramProjName}`}
-        numLancamentos={totalItens}
-        vlrTotal={valorTotal}
-        children1={
-          <BasicStatistics
-            valorTotal={valorTotal}
-            totalItens={totalItens}
-            skeletonLoad={skeletonLoad}
+      {logado !== 0 ? (
+        <div>
+          <ModalProgress isOpen={isOpenModalProgress} />
+          <SidebarWithHeader
+            tituloPagina={`PROJETO: ${paramProjName}`}
+            numLancamentos={totalItens}
+            vlrTotal={valorTotal}
+            children1={
+              <BasicStatistics
+                valorTotal={valorTotal}
+                totalItens={totalItens}
+                skeletonLoad={skeletonLoad}
+              />
+            }
+            children2={
+              screenSize.dynamicWidth <= 768 ? (
+                <ListView
+                  dados={dadosFiltrados}
+                  delete={handleDelDespesas}
+                  edit={handleEdit}
+                  skeletonLoad={skeletonLoad}
+                />
+              ) : (
+                <Tabela
+                  dados={dadosFiltrados}
+                  delete={handleDelDespesas}
+                  edit={handleEdit}
+                  skeletonLoad={skeletonLoad}
+                />
+              )
+            }
+            childrenAdd={
+              <FormAddLanc
+                data={data}
+                setData={setData}
+                fornecedor={fornecedor}
+                setFornecedor={setFornecedor}
+                descric={descric}
+                setDescric={setDescric}
+                valor={valor}
+                setValor={setValor}
+                isOpen={isOpen}
+                show={onOpen}
+                submit={handleSubmit}
+                close={onClose}
+                setFileURL={setFileURL}
+                setEditMode={setEditMode}
+              />
+            }
+            childrenFiltraLanc={
+              <FiltrarDespesas
+                isOpen={showFiltrar}
+                inputFiltrar={inputFiltrar}
+                setFiltrarPor={setFiltrarPor}
+                filtrarPor={filtrarPor}
+                setInputFiltrar={setInputFiltrar}
+                close={setShowFiltrar}
+              />
+            }
+            childrenBtn={
+              <NavAdd
+                show={onOpen}
+                openFiltrar={setShowFiltrar}
+                isOpenFiltrar={showFiltrar}
+                updateForm={updateForm}
+                print={handlePrint}
+              />
+            }
           />
-        }
-        children2={
-          screenSize.dynamicWidth <= 768 ? (
-            <ListView
-              dados={dadosFiltrados}
-              delete={handleDelDespesas}
-              edit={handleEdit}
-              skeletonLoad={skeletonLoad}
-            />
-          ) : (
-            <Tabela
-              dados={dadosFiltrados}
-              delete={handleDelDespesas}
-              edit={handleEdit}
-              skeletonLoad={skeletonLoad}
-            />
-          )
-        }
-        childrenAdd={
-          <FormAddLanc
-            data={data}
-            setData={setData}
-            fornecedor={fornecedor}
-            setFornecedor={setFornecedor}
-            descric={descric}
-            setDescric={setDescric}
-            valor={valor}
-            setValor={setValor}
-            isOpen={isOpen}
-            show={onOpen}
-            submit={handleSubmit}
-            close={onClose}
-            setFileURL={setFileURL}
-            setEditMode={setEditMode}
-          />
-        }
-        childrenFiltraLanc={
-          <FiltrarDespesas
-            isOpen={showFiltrar}
-            inputFiltrar={inputFiltrar}
-            setFiltrarPor={setFiltrarPor}
-            filtrarPor={filtrarPor}
-            setInputFiltrar={setInputFiltrar}
-            close={setShowFiltrar}
-          />
-        }
-        childrenBtn={
-          <NavAdd
-            show={onOpen}
-            openFiltrar={setShowFiltrar}
-            isOpenFiltrar={showFiltrar}
-            updateForm={updateForm}
-            print={handlePrint}
-          />
-        }
-      />
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

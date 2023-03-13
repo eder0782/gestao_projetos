@@ -16,6 +16,7 @@ import CardProjetos from "@/components/Cards/CardProjetos";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import ListView from "@/components/ListView";
 import { useToast } from "@chakra-ui/react";
+
 import {
   ref as refStorage,
   getDownloadURL,
@@ -23,6 +24,10 @@ import {
 } from "firebase/storage";
 import { useState, useRef, useEffect } from "react";
 import FormProjetos from "@/components/Forms/FormProjetos";
+
+import ContextLogin from "@/services/contextLogin";
+import { useContext } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Projetos() {
   //controla o estado do Modal Progress
@@ -59,6 +64,17 @@ export default function Projetos() {
 
   //controla o estado do skeleton da tabela do CardProjetos
   const [skeletonLoad, setSkeletonLoad] = useState(false);
+
+  //VERIFICA SE O USUÁRIO ESTÁ LOGADO
+  const [logado, setLogado] = useContext(ContextLogin);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (logado === 0) {
+      router.replace("/login");
+    }
+  }, []);
+
   //MONITORA OS DADOS DO SERVIDOR PARA ATUALIZAR OS DADOS FILTRADOS
   useEffect(() => {
     setDadosFiltrados(ordenarPordata(dados));
@@ -312,63 +328,58 @@ export default function Projetos() {
 
   return (
     <div>
-      {/* <WithSubnavigation />
-      <BasicStatistics />
-      <Tabela /> */}
-      <ModalProgress isOpen={isOpenModalProgress} />
-      <SidebarWithHeader
-        // numLancamentos={totalItens}
-        // vlrTotal={valorTotal}
-        // children1={
-        //   <BasicStatistics
-        //     valorTotal={valorTotal}
-        //     totalItens={totalItens}
-        //     skeletonLoad={skeletonLoad}
-        //   />
-        // }
-        tituloPagina={`LISTA DE PROJETOS`}
-        children2={
-          <CardProjetos
-            dados={dadosFiltrados}
-            delete={handleDelProjetos}
-            edit={handleEdit}
-            skeletonLoad={skeletonLoad}
+      {/* {console.log(logado)} */}
+      {logado !== 0 ? (
+        <div>
+          <ModalProgress isOpen={isOpenModalProgress} />
+          <SidebarWithHeader
+            tituloPagina={`LISTA DE PROJETOS`}
+            children2={
+              <CardProjetos
+                dados={dadosFiltrados}
+                delete={handleDelProjetos}
+                edit={handleEdit}
+                skeletonLoad={skeletonLoad}
+              />
+            }
+            childrenAdd={
+              <FormProjetos
+                inicio={inicio}
+                setInicio={setInicio}
+                projeto={projeto}
+                setProjeto={setProjeto}
+                vlrProjeto={vlrProjeto}
+                setVlrProjeto={setVlrProjeto}
+                isOpen={isOpen}
+                show={onOpen}
+                submit={handleSubmit}
+                close={onClose}
+                setEditMode={setEditMode}
+              />
+            }
+            childrenFiltraLanc={
+              <FiltrarProjetos
+                isOpen={showFiltrar}
+                inputFiltrar={inputFiltrar}
+                // setFiltrarPor={setFiltrarPor}
+                // filtrarPor={filtrarPor}
+                setInputFiltrar={setInputFiltrar}
+                close={setShowFiltrar}
+              />
+            }
+            childrenBtn={
+              <NavAdd
+                show={onOpen}
+                openFiltrar={setShowFiltrar}
+                isOpenFiltrar={showFiltrar}
+                updateForm={updateForm}
+              />
+            }
           />
-        }
-        childrenAdd={
-          <FormProjetos
-            inicio={inicio}
-            setInicio={setInicio}
-            projeto={projeto}
-            setProjeto={setProjeto}
-            vlrProjeto={vlrProjeto}
-            setVlrProjeto={setVlrProjeto}
-            isOpen={isOpen}
-            show={onOpen}
-            submit={handleSubmit}
-            close={onClose}
-            setEditMode={setEditMode}
-          />
-        }
-        childrenFiltraLanc={
-          <FiltrarProjetos
-            isOpen={showFiltrar}
-            inputFiltrar={inputFiltrar}
-            // setFiltrarPor={setFiltrarPor}
-            // filtrarPor={filtrarPor}
-            setInputFiltrar={setInputFiltrar}
-            close={setShowFiltrar}
-          />
-        }
-        childrenBtn={
-          <NavAdd
-            show={onOpen}
-            openFiltrar={setShowFiltrar}
-            isOpenFiltrar={showFiltrar}
-            updateForm={updateForm}
-          />
-        }
-      />
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
