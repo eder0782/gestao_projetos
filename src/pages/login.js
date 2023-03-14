@@ -11,7 +11,10 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useDisclosure,
+  Progress,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { auth } from "@/services/firebase";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useState, useEffect, useContext } from "react";
@@ -19,49 +22,51 @@ import ContextLogin from "@/services/contextLogin";
 import { useRouter } from "next/router";
 
 export default function SimpleCard() {
+  const toast = useToast();
   const [logado, setLogado] = useContext(ContextLogin);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  //controla o estado o componente FormAddLanc
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const autentiCar = () => {
     if (email !== "" && password !== "") {
+      onOpen();
       signInWithEmailAndPassword(email, password);
+      
+     
+      
     }
   };
+  
+  useEffect(()=>{
+    if (error) {
+      onClose();
+      toast({
+        title: "Falha no login.",
+        description: `Usuário ou senha inválidos!!`,
+        status: "error",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
 
-  // useEffect(() => {
-  //   if (logado !== 0) {
-  //     router.replace("/projetos");
-  //   }
-  // }, [logado]);
+  },[error])
+  useEffect(() => {
+    if (logado !== 0) {
+      router.replace("/projetos");
+    }
+  }, [logado]);
 
-  // useEffect(() => {
-  //   // if (logado !== 0) {
-  //   //   router.replace("/projetos");
-  //   // }
-  //   console.log(logado);
-  // }, [logado]);
-
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error.message}</p>
-      </div>
-    );
-  }
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  
   if (user) {
+    
     setLogado(true);
-    // console.log(logado);
-    // router.replace("/projetos");
+    
   }
-
-  // const color = useColorModeValue("gray.50", "gray.800");
-  // const color2 = useColorModeValue("white", "gray.700");
 
   return (
     <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"gray.50"}>
@@ -102,7 +107,9 @@ export default function SimpleCard() {
                 <Link color={"blue.400"}>Esqueceu a senha?</Link>
               </Stack>
               <Button
-                onClick={autentiCar}
+                onClick={() => {
+                  autentiCar();
+                }}
                 bg={"blue.400"}
                 color={"white"}
                 _hover={{
@@ -114,6 +121,7 @@ export default function SimpleCard() {
             </Stack>
           </Stack>
         </Box>
+        {isOpen ? <Progress size="xs" isIndeterminate /> : <div></div>}
       </Stack>
     </Flex>
   );
