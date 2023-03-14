@@ -68,7 +68,6 @@ export default function Projetos() {
   //VERIFICA SE O USUÁRIO ESTÁ LOGADO
   const [logado, setLogado] = useContext(ContextLogin);
   const router = useRouter();
-
   useEffect(() => {
     if (logado === 0) {
       router.replace("/login");
@@ -80,7 +79,7 @@ export default function Projetos() {
     setDadosFiltrados(ordenarPordata(dados));
     setTimeout(() => {
       setSkeletonLoad(true);
-    }, 4000);
+    }, 1000);
   }, [dados]);
 
   //MONITORA OS DADOSFILTRADOS PARA CALCULAR OS TOTAIS

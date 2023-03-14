@@ -11,7 +11,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { database, storage_name, db_name, storage } from "@/services/firebase";
 import { ref, update, push, child, get, remove } from "firebase/database";
 import FiltrarDespesas from "@/components/Consultas/FIltrarDespesas";
-import CardDespesas from "@/components/Cards/CardDespesas";
+// import CardDespesas from "@/components/Cards/CardDespesas";
 // import { collection, addDoc } from "firebase/firestore";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import ListView from "@/components/ListView";
@@ -91,7 +91,7 @@ export default function Lancamentos(props) {
     setDadosFiltrados(ordenarPordata(dados));
     setTimeout(() => {
       setSkeletonLoad(true);
-    }, 4000);
+    }, 1500);
   }, [dados]);
 
   //MONITORA OS DADOSFILTRADOS PARA CALCULAR OS TOTAIS
@@ -367,7 +367,9 @@ export default function Lancamentos(props) {
   };
 
   const handlePrint = () => {
-    Router.push(`/relatorios/despesas`);
+    Router.push(
+      `/relatorios/despesas/${dadosFiltrados}/?vlrTotal=${valorTotal}`
+    );
   };
   return (
     <div>
