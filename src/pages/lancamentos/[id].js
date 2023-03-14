@@ -24,6 +24,7 @@ import {
 import { useState, useRef, useEffect } from "react";
 import ContextLogin from "@/services/contextLogin";
 import { useContext } from "react";
+import ContextRelDesp from "@/services/contextRelDesp";
 // import { useRouter } from "next/navigation";
 
 export default function Lancamentos(props) {
@@ -366,10 +367,15 @@ export default function Lancamentos(props) {
     } else onOpen();
   };
 
+  //GERANDO DADOS PARA O RELATÓRIO
+  const [dadosRel, setDadosRel] = useContext(ContextRelDesp);
   const handlePrint = () => {
-    Router.push(
-      `/relatorios/despesas/${dadosFiltrados}/?vlrTotal=${valorTotal}`
-    );
+    // let jsonDados ={dados:JSON.stringify(dados)};
+    setDadosRel(dadosFiltrados);
+    // jsonDados = JSON.stringify(jsonDados)
+    // console.log(JSON.stringify(dados))
+    Router.replace(`/relatorios/despesas/dados/?vlrTotal=${valorTotal}`);
+    
   };
   return (
     <div>

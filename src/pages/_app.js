@@ -1,13 +1,17 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import ContextLogin from "@/services/contextLogin";
 import { useState } from "react";
+import ContextRelDesp from "@/services/contextRelDesp";
 
 function MyApp({ Component, pageProps }) {
   const [logado, setLogado] = useState(0);
+  const [dadosRel, setDadosRel ]= useState([]);
   return (
     <ChakraProvider>
       <ContextLogin.Provider value={[logado, setLogado]}>
-        <Component {...pageProps} />
+        <ContextRelDesp.Provider value={[dadosRel,setDadosRel]}>
+          <Component {...pageProps} />
+        </ContextRelDesp.Provider>
       </ContextLogin.Provider>
     </ChakraProvider>
   );
